@@ -1,0 +1,85 @@
+<div style="text-align:left">
+
+  <h2 mat-dialog-title>
+    <!-- {{'請輸入新銀行基本資料欄位'|i18n}} -->
+    請輸入新銀行基本資料欄位
+  </h2>
+  <div mat-dialog-content>
+    <form (ngSubmit)="insertData(inputNewData)" ngNativeValidate>
+      <!-- <mat-form-field>
+        <input matInput [(ngModel)]="inputNewData.COMPANY_ID" name="COMPANY_ID" placeholder="公司別" required>
+      </mat-form-field> -->
+
+      <mat-form-field>
+        <mat-select placeholder="公司別" [(ngModel)]="inputNewData.COMPANY_ID" name="CPMPANY_ID" required>
+          <mat-option *ngFor="let cp of company " [value]="cp.value">
+            {{cp.text}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput [(ngModel)]="inputNewData.BANK_CODE" name="BANK_CODE" placeholder="銀行代碼" required>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput [(ngModel)]="inputNewData.BANK_DESC" name="BANK_DESC" placeholder="銀行名稱及戶名" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [(ngModel)]="inputNewData.BANK_ACCOUNT" name="BANK_ACCOUNT" placeholder="銀行帳號" required>
+      </mat-form-field>
+      <!-- <mat-form-field>
+        <input matInput [(ngModel)]="inputNewData.BANK_TYPE" name="BANK_TYPE" placeholder="銀行戶別" required>
+      </mat-form-field> -->
+      <mat-form-field>
+        <mat-select placeholder="銀行戶別" [(ngModel)]="inputNewData.BANK_TYPE" name="BANK_TYPE" required>
+          <mat-option *ngFor="let cp of banktype " [value]="cp.VALUE">
+            {{cp.DESCRIPTION}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select placeholder="幣別" [(ngModel)]="inputNewData.CURR_CD" name="CURR_CD" required>
+          <mat-option *ngFor="let cp of currency " [value]="cp.CURR_CD">
+            {{cp.CURR_CD}}({{cp.CURR_DESC}})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput [(ngModel)]="inputNewData.ACCTNUM" name="ACCTNUM" placeholder="會計科目" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [(ngModel)]="inputNewData.COUNTRY" name="COUNTRY" placeholder="國家" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [(ngModel)]="inputNewData.CUST_CODE" name="CUST_CODE" placeholder="廠商代碼" required>
+      </mat-form-field>
+
+
+      <mat-form-field>
+        <label>生效日</label>
+        <input matInput [matDatepicker]="EFF_DATEpicker" [(ngModel)]="inputNewData.EFF_DATE" name="EFF_DATE">
+        <mat-datepicker-toggle matSuffix [for]="EFF_DATEpicker"></mat-datepicker-toggle>
+        <mat-datepicker #EFF_DATEpicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <label>截止日</label>
+        <input matInput [matDatepicker]="EXP_DATEpicker" [(ngModel)]="inputNewData.EXP_DATE" name="EXP_DATE">
+        <mat-datepicker-toggle matSuffix [for]="EXP_DATEpicker"></mat-datepicker-toggle>
+        <mat-datepicker #EXP_DATEpicker></mat-datepicker>
+      </mat-form-field>
+      <div>
+        <!-- <button mat-raised-button color="primary" type="submit">{{'CONFIRM'|i18n}}</button>
+        <button mat-raised-button color="warn" mat-dialog-close>{{'CANCEL'|i18n:'Message'}}</button> -->
+
+        <button mat-raised-button color="primary" type="submit">CONFIRM</button>
+        <button mat-raised-button color="warn" mat-dialog-close>CANCEL</button>
+      </div>
+
+    </form>
+    <!-- <button mat-raised-button color="accent" (click)="test()">Test</button> -->
+  </div>
+</div>

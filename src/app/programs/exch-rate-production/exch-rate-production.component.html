@@ -1,0 +1,137 @@
+<h1>{{Title}}</h1>
+<h4>{{subTitle}}</h4>
+
+<div>
+    <!-- 幣別代碼:
+    <input [(ngModel)]="parameterModel.CURRENCY_CODE" type="text">
+    
+    <input type="text">
+    
+    <br>
+    查詢日期:<input [(ngModel)]="parameterModel.EXCH_DATE" type="text">(YYYYMMDD)
+    
+    <br>
+    <button (click)="Query()">查詢</button>
+    <button (click)="Export()">匯出</button> -->
+    <br>
+
+    <!--  Material -->
+    <mat-form-field class="standard-width" style="width:100px">
+        <input matInput placeholder="幣別代碼" [(ngModel)]="parameterModel.CURRENCY_CODE">
+    </mat-form-field>
+
+    <mat-form-field class="standard-width" style="width:100px">
+        <input matInput placeholder="查詢日期" [(ngModel)]="parameterModel.EXCH_DATE">
+    </mat-form-field>
+
+    <button mat-fab color="primary" (click)="Query()">
+        <span matTooltip="查詢">
+            <mat-icon>search</mat-icon>
+        </span>
+    </button>
+
+    <button mat-fab style="background: rgb(0, 208, 101)" (click)="Export()">
+        <span matTooltip="匯出">
+            <mat-icon>explicit</mat-icon>
+        </span>
+    </button>
+</div>
+
+<br>
+
+<div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+
+<div class="standard-width" *ngIf="exchRates.length !== 0">
+    <table #table mat-table [dataSource]="exchRatesDataSource">
+
+        <ng-container matColumnDef="NO">
+            <th mat-header-cell *matHeaderCellDef>序號 </th>
+            <td mat-cell *matCellDef="let element">
+                {{1}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="EXCH_DATE">
+            <th mat-header-cell *matHeaderCellDef>日期 </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.EXCH_DATE}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CURRENCY_CODE">
+            <th mat-header-cell *matHeaderCellDef>幣別代碼 </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.CURRENCY_CODE}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CURRENCY_NAME">
+            <th mat-header-cell *matHeaderCellDef>幣別名稱 </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.CURRENCY_NAME}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="AVG_PRICE">
+            <th mat-header-cell *matHeaderCellDef>AR 當日匯率 </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.AVG_PRICE}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="BUY_PRICE">
+            <th mat-header-cell *matHeaderCellDef>GA 當日匯率 </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.BUY_PRICE}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CNTRY_NAME">
+            <th mat-header-cell *matHeaderCellDef>國家名稱 </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.CNTRY_NAME}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CNTRY_CODE">
+            <th mat-header-cell *matHeaderCellDef>國家代碼 </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.CNTRY_CODE}}
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="tableColumns;sticky:false;"></tr>
+        <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+    </table>
+</div>
+
+<div class="standard-width" *ngIf="exchRates.length === 0">
+    <label>查無資料...</label>
+</div>
+
+<!-- <div>
+    <table border=1>
+        <tr>
+            <td>序號</td>
+            <td>日期</td>
+            <td>幣別代碼</td>
+            <td>幣別名稱</td>
+            <td>AR 當日匯率</td>
+            <td>GA 當日匯率</td>
+            <td>國家名稱</td>
+            <td>國家代碼</td>
+        </tr>
+        <tr *ngFor="let user of exchRates">
+            <td>{{1}}</td>
+            <td>{{user.IN_DATE}}</td>
+            <td>{{user.CURRENCY_CODE}}</td>
+            <td>{{user.CURRENCY_NAME}}</td>
+            <td>{{user.AVG_PRICE}}</td>
+            <td>{{user.BUY_PRICE}}</td>
+            <td>{{user.CNTRY_NAME}}</td>
+            <td>{{user.CNTRY_CODE}}</td>
+        </tr>
+    </table>
+</div> -->

@@ -1,0 +1,21 @@
+<button mat-fab style="background: rgb(0, 208, 101)" (click)="save2Excel(excelexport)">
+  <span matTooltip="Export Excel">
+    <mat-icon>explicit</mat-icon>
+  </span>
+</button>
+<kendo-excelexport [data]="SettlementExcelData" fileName="CM09005差額交割.xlsx" [filterable]="true" #excelexport>
+  <kendo-excelexport-column field="COMPANY_ID" title="AFSYS RECEIPT NO.
+  " [width]="100">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="SEQREF" title="交易序號" [width]="100">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="vTRADE_DATE" title="交易日期" [width]="150">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="vSETTLEMENT_DATE" title="交割日期" [width]="150"></kendo-excelexport-column>
+  <kendo-excelexport-column field="OP_BANK" title="承作銀行" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="SETTLEMENT_CURRENCY" title="交割幣別" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="SETTLEMENT_AMT" title="交割收入" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="DP_BANK" title="存入銀行" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="TRADE_USER" title="交易人員" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="SETTLEMENT_USER" title="交割人員" [width]="100"></kendo-excelexport-column>
+</kendo-excelexport>

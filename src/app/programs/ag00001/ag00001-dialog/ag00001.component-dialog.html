@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>
+  提醒</h2>
+<!-- <div class="standard-closed">
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon matTooltip="Closed">
+      clear
+    </mat-icon>
+  </button>
+</div> -->
+
+<div>
+  <h4>請問確定要終止這一筆合約嗎?</h4>
+  <div class="standard-closed">
+    <button mat-fab color="warn" (click)="terminateBuildingContract()">
+      <span matTooltip="Approve">
+        <mat-icon>done_all
+        </mat-icon>
+      </span>
+    </button>
+    <button mat-fab color="primary" mat-dialog-close>
+      <span matTooltip="Cancel">
+        <mat-icon>clear</mat-icon>
+      </span>
+    </button>
+  </div>
+</div>

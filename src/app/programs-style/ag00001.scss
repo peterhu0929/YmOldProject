@@ -1,0 +1,153 @@
+table {
+    width: 100%;
+}
+
+tr.example-detail-row {
+    height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+    background: #f5f5f5;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+}
+
+.example-element-row td {
+    border-bottom-width: 0;
+}
+
+.example-element-detail {
+    overflow: hidden;
+    display: flex;
+}
+
+.example-element-diagram {
+    min-width: 80px;
+    border: 2px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    height: 104px;
+}
+
+.example-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+}
+
+.example-element-description {
+    padding: 16px;
+}
+
+.example-element-description-attribution {
+    opacity: 0.5;
+}
+
+// .mat-tab-label-container {
+//     background: skyblue;
+// }
+
+.mat-table {
+    overflow: auto;
+    max-height: 800px;
+}
+
+// Collin支援DataTable標頭固定
+.mat-header-cell {
+    top: 0;
+    position: sticky;
+    z-index: 1;
+    background-color: white;
+}
+
+// Rocky支援右下角button
+.create-button-part {
+    padding-right: 20px;
+    padding-bottom: 20px;
+    float: right;
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    z-index: 10;
+}
+
+.standard-width {
+    // width: 50%;
+    margin: 8px;
+}
+
+.standard-closed {
+    text-align: right; // position: top;
+
+}
+
+tr:hover {
+    // color: #000000;
+    // background-color: rgba(255, 0, 0, 0.2); // text-decoration: none;
+    // font-size: 16px;
+    // font-weight: bold;
+}
+
+tr.active {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+.example-container {
+    height: 600px; // 表格高度
+    width: 1900px; // 表格寬度
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}
+
+.inputSize {
+    width: 100px;
+}
+
+.mat-card {
+    // background: lightskyblue;
+    width: 15%;
+    display: table-row;
+    margin: 20px;
+}
+
+.add-card {
+    background: seashell;
+    width: 15%;
+    display: content;
+    margin-left: 400px;
+    // position: absolute;
+}
+
+.img-card {
+    display: inline-table;
+    margin: 10px;
+}
+
+#inline li {
+    float: left;
+    margin-right: 25px;
+    margin-top: 30px;
+    // border: 1px #ccc solid;
+}
+
+#inlinelist .mat-list {
+    float: left;
+    margin-right: 25px;
+    margin-top: 30px;
+    // border: 1px #ccc solid;
+}
+
+//input欄位為reoadOnly
+.input-readOnly .mat-form-field-infix {
+    background: gainsboro
+}
+
+.mat-tab-body {
+    background: azure;
+}

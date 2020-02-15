@@ -1,0 +1,265 @@
+<h2>差額交割</h2>
+<div>
+  <mat-form-field>
+    <input matInput [(ngModel)]="pSettleData.SEQREF" placeholder="交易序號" (keypress)="notSpace($event)">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <mat-select placeholder="承作銀行" [(ngModel)]="pSettleData.OP_BANK" required>
+      <mat-option>--</mat-option>
+      <mat-option *ngFor="let cp of ngTradeBankData " [value]="cp.BANK_NAME ">
+        {{cp.BANK_NAME }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput placeholder="交易日期起始日" [matDatepicker]="TRADE_DATE_Spicker" [(ngModel)]="pSettleData.TRADE_DATE_S"
+      required>
+    <mat-datepicker-toggle matSuffix [for]="TRADE_DATE_Spicker"></mat-datepicker-toggle>
+    <mat-datepicker #TRADE_DATE_Spicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput placeholder="交易日期結束日" [matDatepicker]="TRADE_DATE_Epicker" [(ngModel)]="pSettleData.TRADE_DATE_E"
+      required>
+    <mat-datepicker-toggle matSuffix [for]="TRADE_DATE_Epicker"></mat-datepicker-toggle>
+    <mat-datepicker #TRADE_DATE_Epicker></mat-datepicker>
+  </mat-form-field>
+  <button mat-fab color="accent" (click)="getSettlementData(pSettleData)">
+    <span matTooltip="查詢">
+      <mat-icon>search</mat-icon>
+    </span>
+  </button>
+  <button mat-fab color="warn" (click)="openAddDialog(nullSettleData,ngTradeBankData,currency,ngTradeVouUser,'ADD')">
+    <span matTooltip="新增">
+      <mat-icon>add</mat-icon>
+    </span>
+  </button>
+  <app-cm09005-excel [SettlementExcelData]="this.SettleData.data"></app-cm09005-excel>
+  <!-- <div *ngIf="totalCount==0">
+  <h5>Please search first...</h5>
+</div>
+<div *ngIf="totalCount>0">
+  <h5>Total:{{totalCount}} data</h5>
+</div> -->
+  <mat-paginator #paginator [length]="totalCount" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 15]">
+  </mat-paginator>
+
+  <div class="example-container">
+    <table mat-table [dataSource]="SettleData" matSort #sortTableUser="matSort">
+      <!-- <ng-container matColumnDef="EDIT_BUTTON">
+        <th mat-header-cell *matHeaderCellDef>編輯</th>
+        <td mat-cell *matCellDef="let row">
+          <button *ngIf=!row.isDisabled mat-mini-fab color="accent" (click)="row.isDisabled=true">
+            <span matTooltip="Edit">
+              <mat-icon>edit</mat-icon>
+            </span>
+          </button>
+          <button *ngIf=row.isDisabled mat-mini-fab color="warn" (click)="row.isDisabled=false">
+            <span matTooltip="Cancel">
+              <mat-icon>clear</mat-icon>
+            </span>
+          </button>
+          <button *ngIf=row.isDisabled mat-mini-fab color="accent" (click)="updateSnackbar();row.isDisabled=false">
+            <span matTooltip="Confirm">
+              <mat-icon>send</mat-icon>
+            </span>
+          </button>
+        </td>
+      </ng-container> -->
+      <ng-container matColumnDef="COPY_BUTTON">
+        <th mat-header-cell *matHeaderCellDef>複製</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-mini-fab color="accent" (click)="openAddDialog(row,ngTradeBankData,currency,ngTradeVouUser,'COPY')">
+            <span matTooltip="Copy">
+              <mat-icon>content_copy</mat-icon>
+            </span>
+          </button>
+        </td>
+      </ng-container>
+      <!-- <ng-container matColumnDef="DELETE_BUTTON">
+        <th mat-header-cell *matHeaderCellDef>作廢</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-mini-fab color="warn" (click)="openCancelDialog(row.USER_KEY)" *ngIf="!deleteIcon(row)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container> -->
+
+      <ng-container matColumnDef="PDF">
+        <th mat-header-cell *matHeaderCellDef>PDF</th>
+        <td mat-cell *matCellDef="let row">
+          <div>
+            <button mat-mini-fab style="background:red" color="warn" (click)="openPDF(row)">
+              <span matTooltip="Export PDF">
+                <mat-icon>picture_as_pdf
+                </mat-icon>
+              </span>
+            </button>
+            <kendo-dialog title="PDF Review" *ngIf="pdf_yn" (close)="pdf_yn=false" [width]="600">
+              <kendo-pdf-export #pdf paperSize="A4" margin="1cm">
+                {{row.SEQREF}}
+              </kendo-pdf-export>
+              <div style="text-align:right">
+                <button mat-raised-button color="accent" (click)="pdf.saveAs('CM09005.pdf')" [ngStyle]="{'margin': '20px'}">
+                  Export to PDF...
+                  <mat-icon>picture_as_pdf</mat-icon>
+                </button>
+                <button mat-raised-button color="primary" (click)="pdf_yn=false">
+                  Done
+                </button>
+              </div>
+            </kendo-dialog>
+          </div>
+        </td>
+      </ng-container>
+
+
+
+      <!-- <ng-container matColumnDef="DELETE_YN">
+        <th mat-header-cell *matHeaderCellDef>是否停用
+        </th>
+        <td mat-cell *matCellDef="let row" [ngStyle]="{'color':changeColor(row)}">
+          <mat-icon *ngIf="deleteIcon(row)">backspace</mat-icon>
+        </td>
+      </ng-container> -->
+      <ng-container matColumnDef="COMPANY_ID">
+        <th mat-header-cell *matHeaderCellDef>公司別</th>
+        <td mat-cell *matCellDef="let row">{{ row.COMPANY_ID }}</td>
+      </ng-container>
+      <ng-container matColumnDef="SEQREF">
+        <th mat-header-cell *matHeaderCellDef>交易序號</th>
+        <td mat-cell *matCellDef="let row">{{ row.SEQREF }}</td>
+      </ng-container>
+      <ng-container matColumnDef="TRADE_DATE">
+        <th mat-header-cell *matHeaderCellDef>交易日期</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-form-field class="inputSize">
+            <input matInput [matDatepicker]="TRADE_DATEpicker" [(ngModel)]="row.TRADE_DATE" [disabled]="!row.isDisabled">
+            <mat-datepicker-toggle matSuffix [for]="TRADE_DATEpicker"></mat-datepicker-toggle>
+            <mat-datepicker #TRADE_DATEpicker></mat-datepicker>
+          </mat-form-field>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="SETTLEMENT_DATE">
+        <th mat-header-cell *matHeaderCellDef>交割日期</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-form-field class="inputSize">
+            <input matInput [matDatepicker]="SETTLEMENT_DATEpicker" [(ngModel)]="row.SETTLEMENT_DATE" [disabled]="!row.isDisabled">
+            <mat-datepicker-toggle matSuffix [for]="SETTLEMENT_DATEpicker"></mat-datepicker-toggle>
+            <mat-datepicker #SETTLEMENT_DATEpicker></mat-datepicker>
+          </mat-form-field>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="T1_SELL_CURRENCY">
+        <th mat-header-cell *matHeaderCellDef>T1_SELL幣別</th>
+        <td mat-cell *matCellDef="let row">{{ row.T1_SELL_CURRENCY }}</td>
+      </ng-container>
+      <ng-container matColumnDef="T1_SELL_AMT">
+        <th mat-header-cell *matHeaderCellDef>T1_SELL金額</th>
+        <td mat-cell *matCellDef="let row">{{ row.T1_SELL_AMT }}</td>
+      </ng-container>
+      <ng-container matColumnDef="T1_BUY_CURRENCY">
+        <th mat-header-cell *matHeaderCellDef>T1_BUY幣別</th>
+        <td mat-cell *matCellDef="let row">{{ row.T1_BUY_CURRENCY }}</td>
+      </ng-container>
+      <ng-container matColumnDef="T1_BUY_AMT">
+        <th mat-header-cell *matHeaderCellDef>T1_BUY金額</th>
+        <td mat-cell *matCellDef="let row">{{ row.T1_BUY_AMT }}</td>
+      </ng-container>
+      <ng-container matColumnDef="T1_SELL_EXCHANGE_RATE">
+        <th mat-header-cell *matHeaderCellDef>T1_SELL匯率</th>
+        <td mat-cell *matCellDef="let row">{{ row.T1_SELL_EXCHANGE_RATE }}</td>
+      </ng-container>
+      <ng-container matColumnDef="T2_BUY_CURRENCY">
+        <th mat-header-cell *matHeaderCellDef>T2_BUY幣別</th>
+        <td mat-cell *matCellDef="let row">{{ row.T2_BUY_CURRENCY }}</td>
+      </ng-container>
+      <ng-container matColumnDef="T2_BUY_AMT">
+        <th mat-header-cell *matHeaderCellDef>T2_BUY總數</th>
+        <td mat-cell *matCellDef="let row">{{ row.T2_BUY_AMT }}</td>
+      </ng-container>
+      <ng-container matColumnDef="T2_SELL_CURRENCY">
+        <th mat-header-cell *matHeaderCellDef>T2_SELL幣別</th>
+        <td mat-cell *matCellDef="let row">{{ row.T2_SELL_CURRENCY }}</td>
+      </ng-container>
+      <ng-container matColumnDef="T2_SELL_AMT">
+        <th mat-header-cell *matHeaderCellDef>T2_SELL總數</th>
+        <td mat-cell *matCellDef="let row">{{ row.T2_SELL_AMT }}</td>
+      </ng-container>
+      <ng-container matColumnDef="T2_BUY_EXCHANGE_RATE">
+        <th mat-header-cell *matHeaderCellDef>T2_BUY匯率</th>
+        <td mat-cell *matCellDef="let row">{{ row.T2_BUY_EXCHANGE_RATE }}</td>
+      </ng-container>
+      <ng-container matColumnDef="SUMMARY">
+        <th mat-header-cell *matHeaderCellDef>總結</th>
+        <td mat-cell *matCellDef="let row">{{ row.SUMMARY }}</td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="OP_BANK">
+        <th mat-header-cell *matHeaderCellDef>承作銀行</th>
+        <td mat-cell *matCellDef="let row">
+          <div>
+            {{ row.OP_BANK }}
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="SETTLEMENT_CURRENCY">
+        <th mat-header-cell *matHeaderCellDef>交割幣別</th>
+        <td mat-cell *matCellDef="let row">
+          <div>
+            {{ row.SETTLEMENT_CURRENCY }}
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="SETTLEMENT_AMT">
+        <th mat-header-cell *matHeaderCellDef>交割收入</th>
+        <td mat-cell *matCellDef="let row">{{ row.SETTLEMENT_AMT| number }}</td>
+      </ng-container>
+      <ng-container matColumnDef="DP_BANK">
+        <th mat-header-cell *matHeaderCellDef>存入銀行</th>
+        <td mat-cell *matCellDef="let row">
+          <div>
+            {{ row.DP_BANK }}
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="TRADE_USER">
+        <th mat-header-cell *matHeaderCellDef>交易人員</th>
+        <td mat-cell *matCellDef="let row">
+          <div>
+            {{ row.TRADE_USER|code2Name:'FFCM' }}
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="SETTLEMENT_USER">
+        <th mat-header-cell *matHeaderCellDef>交割人員</th>
+        <td mat-cell *matCellDef="let row">
+          <div>
+            {{ row.SETTLEMENT_USER|code2Name:'FFCM'}}
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="STATUS">
+        <th mat-header-cell *matHeaderCellDef>狀態</th>
+        <td mat-cell *matCellDef="let row">{{ row.STATUS }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Detail">
+        <th mat-header-cell *matHeaderCellDef>細節</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-mini-fab color="accent" (click)="openAddDialog(row,ngTradeBankData,currency,ngTradeVouUser,'DETAIL')">
+            <mat-icon>
+              assignment
+            </mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let Row; columns: displayedColumns;" (click)="selectedRow=Row" [class.active]="Row == selectedRow"></tr>
+      <!--選擇一筆資料並且hightlight-->
+
+    </table>
+  </div>
+  <!-- <app-cm09005component-detail *ngFor="let cp of ngTradeBankData" ngTradeBankDatas="ngTradeBankData"></app-cm09005component-detail> -->
+
+  <!-- <app-cm09005component-detail [Tri]="'pTri'"></app-cm09005component-detail> -->

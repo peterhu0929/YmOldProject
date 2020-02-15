@@ -1,0 +1,31 @@
+export class StockOptionEmployee {
+  public  KEY_NO:             number=0;
+  public  F_KEY_NO:           number=0;
+  public  IDCARD:             string= '';
+  public  SHARE_NUMBER:       number=0;
+  public  CAN_SHARE_NUMBER:   number=0;
+  public  EMPLOYEE_NAME:      string= '';
+  public  RESIDENCE_ADDRESS:  string= '';
+  public  MAILING_ADDRESS:    string= '';
+  public  PHONE_NUMBER:       string= '';
+  public  BIRTHDAY:           Date= new Date();
+  public  TDCC_ID:            string= '';
+  public  HEAD_OFFICE:        string= '';
+  public  BANK_ACCOUNT:       string= '';
+  public  COMPANY:            string= '';
+  public  FACTORY:            string= '';
+  public  DEPARTMENT:         string= '';
+  public  EMPLOYEE_OPTION:    string= '';
+  public  EMPLOYEEID:         string= '';
+  public  FLEX1:              string= '';
+  public  FLEX2:              string= '';
+  public  FLEX3:              string= '';
+  public  FLEX4:              string= '';
+  public  FLEX5:              string= '';
+  public  IN_DATE:            Date= new Date();
+  public  IN_USER:            string= '';
+  public  UP_DATE:            Date= new Date();
+  public  UP_USER:            string= '';
+  public  POST_CODE:          string= '';
+  public  MAILING_POST_CODE:  string= '';
+}

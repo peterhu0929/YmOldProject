@@ -1,0 +1,34 @@
+export class CASH_TRADE_MASTER {
+  public KEY_NO: number; //
+  public COMPANY_ID: string; //
+  public SEQREF: string; //
+  public TRADE_DATE: Date; //
+  public VALUE_DATE: Date; //
+  public BUY_CURRENCY: string; //
+  public SELL_CURRENCY: string; //
+  public EXCHANGE_RATE: number; //
+  public OS_USER: string; //
+  public TERMINAL: string; //
+  public IN_DATE: Date; //
+  public REMARK: string; //
+  public OPER_U_ID: string; //
+  public APPROVE_U_ID: string; //
+  public CRENO_P1: string; //
+  public YEAR_P1: string; //
+  public CRENO_P2: string; //
+  public YEAR_P2: string; //
+  public CRENO_Q1: string; //
+  public YEAR_Q1: string; //
+  public CRENO_Q2: string; //
+  public YEAR_Q2: string; //
+  public CRENO_PQ: string; //
+  public YEAR_PQ: string; //
+  public EXCHANGE_BANK: number; //
+  public STATUS: number; //
+  public POSTDATE: Date; //
+  public POST_SW: string; //
+  public POST_REQ_U_ID: string; //
+  public DESP: string; //
+  public VOUNO_PQ: string; //
+  public VOU_U_ID: string; //
+}

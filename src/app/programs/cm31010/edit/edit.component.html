@@ -1,0 +1,99 @@
+<!-- <h3>{{pCompanyID}}-{{pBankCode}}-{{pBankDesc}}-往來銀行帳戶餘額</h3> -->
+<h3>往來銀行帳戶餘額</h3>
+<mat-chip-list *ngFor="let bank of finbank">
+  <mat-chip color="accent" selected="true">{{bank.COMPANY_ID}}</mat-chip>
+  <mat-chip color="accent" selected="true">{{bank.BANK_CODE}}</mat-chip>
+  <mat-chip color="accent" selected="true">{{bank.BANK_DESC}}</mat-chip>
+  <mat-chip color="accent" selected="true">{{bank.ACCTNUM}}</mat-chip>
+  <mat-chip color="accent" selected="true">{{bank.CURR_CD}}</mat-chip>
+</mat-chip-list>
+
+
+<button mat-raised-button color="primary" (click)="goBack()">
+  上一頁
+</button>
+
+<button mat-raised-button style="background: rgb(0, 208, 101)" (click)="save2Excel(excelexport)" [ngStyle]="{'margin': '20px'}">Export
+  <mat-icon>explicit</mat-icon>
+</button>
+<!-- <kendo-excelexport [data]="finbank" fileName="FinBank.xlsx" [filterable]="true" #excelexport1>
+  <kendo-excelexport-column field="BANK_CODE" title="銀行代碼" [width]="100">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="BANK_DESC" title="銀行名稱及戶名" [width]="300">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="BANK_ACCOUNT" title="銀行帳號" [width]="100">
+  </kendo-excelexport-column>
+</kendo-excelexport> -->
+<kendo-excelexport [data]="finbankbals" fileName="CM31010銀行餘額表.xlsx" [filterable]="true" #excelexport>
+  <kendo-excelexport-column field="BALDATE" title="日期" [width]="150">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="PBAL" title="前日餘額" [width]="150">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="REVBAL" title="本日收入總金額" [width]="150">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="EXPBAL" title="本日費用總金額" [width]="150">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="BAL" title="本日餘額" [width]="150">
+  </kendo-excelexport-column>
+</kendo-excelexport>
+<!-- <table class="table table-striped ">
+  <thead>
+    <tr>
+      <th>日期</th>
+      <th>前日餘額</th>
+      <th>本日收入總金額</th>
+      <th>本日費用總金額</th>
+      <th>本日餘額</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let results of finbankbals" class="item-content">
+      <td>{{results.BALDATE| date:'yyyy.MM.dd'}}</td>
+      <td>{{results.PBAL}}</td>
+      <td>{{results.REVBAL}}</td>
+      <td>{{results.EXPBAL}}</td>
+      <td>{{results.BAL}}</td>
+    </tr>
+  </tbody>
+</table> -->
+
+<div class="example-container mat-elevation-z8">
+  <mat-table #table [dataSource]="finbankbals">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="BALDATE">
+      <mat-header-cell *matHeaderCellDef> 日期 </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.BALDATE| date:'yyyy.MM.dd'}} </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="PBAL">
+      <mat-header-cell *matHeaderCellDef> 前日餘額 </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.PBAL}} </mat-cell>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="REVBAL">
+      <mat-header-cell *matHeaderCellDef> 本日收入總金額 </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.REVBAL}} </mat-cell>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="EXPBAL">
+      <mat-header-cell *matHeaderCellDef> 本日費用總金額 </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.EXPBAL}} </mat-cell>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="BAL">
+      <mat-header-cell *matHeaderCellDef> 本日餘額 </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.BAL}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>

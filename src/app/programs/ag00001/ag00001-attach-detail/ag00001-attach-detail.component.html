@@ -1,0 +1,120 @@
+<div style="margin-left:400px">
+  <div>
+    <mat-card class=" add-card">
+      <h4 style="text-align:left"><label>新增一筆副約</label></h4>
+      <mat-form-field class="standard-width">
+        <input matInput [matDatepicker]="CONTRACT_START_DATEpicker" placeholder="合約開始日" [(ngModel)]="newContractDetail.CONTRACT_START_DATE">
+        <mat-datepicker-toggle matSuffix [for]="CONTRACT_START_DATEpicker"></mat-datepicker-toggle>
+        <mat-datepicker #CONTRACT_START_DATEpicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="standard-width">
+        <input matInput [matDatepicker]="CONTRACT_END_DATEpicker" placeholder="合約結束日" [(ngModel)]="newContractDetail.CONTRACT_END_DATE">
+        <mat-datepicker-toggle matSuffix [for]="CONTRACT_END_DATEpicker"></mat-datepicker-toggle>
+        <mat-datepicker #CONTRACT_END_DATEpicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="standard-width inputSize input-readOnly">
+        <input matInput [ngModel]='newContractDetail.CONTRACT_RENT|number' (ngModelChange)="newContractDetail.CONTRACT_RENT=this.programService.removeNumberPipeFormat($event);"
+          (keypress)="this.programService.onlyNumbers($event)" placeholder="房屋租金單價" readonly>
+      </mat-form-field>
+      <mat-form-field class="standard-width">
+        <input matInput [ngModel]='newContractDetail.CONTRACT_MONTH_RENT_ORAMT |number' (ngModelChange)="newContractDetail.CONTRACT_MONTH_RENT_ORAMT=this.programService.removeNumberPipeFormat($event);change2SumDetail(masterData,newContractDetail)"
+          (keypress)="this.programService.onlyNumbers($event)" placeholder="每月房屋租金(原幣)">
+      </mat-form-field>
+      <mat-form-field class="standard-width input-readOnly">
+        <input matInput [ngModel]='newContractDetail.CONTRACT_MONTH_RENT_TWD|number' (ngModelChange)="newContractDetail.CONTRACT_MONTH_RENT_TWD=this.programService.removeNumberPipeFormat($event);"
+          (keypress)="this.programService.onlyNumbers($event)" placeholder="每月房屋租金(TWD)" readonly>
+      </mat-form-field>
+      <button mat-mini-fab color="primary" (click)="addEvent2TriData(newContractDetail,masterData)">
+        <span matTooltip="增加一筆">
+          <mat-icon>add</mat-icon>
+        </span>
+      </button>
+    </mat-card>
+  </div>
+  <div>
+    <mat-card *ngFor="let row of detailData">
+      <h4>{{row.CONTRACT_SEQREF}}</h4>
+      <div *ngIf="!row.isDisabled">
+
+        <mat-form-field class="standard-width ">
+          <input matInput [matDatepicker]="CONTRACT_START_DATEpicker" placeholder="合約開始日" [(ngModel)]="row.CONTRACT_START_DATE"
+            [disabled]="true">
+          <mat-datepicker-toggle matSuffix [for]="CONTRACT_START_DATEpicker"></mat-datepicker-toggle>
+          <mat-datepicker #CONTRACT_START_DATEpicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="standard-width ">
+          <input matInput [matDatepicker]="CONTRACT_END_DATEpicker" placeholder="合約結束日" [(ngModel)]="row.CONTRACT_END_DATE"
+            [disabled]="true">
+          <mat-datepicker-toggle matSuffix [for]="CONTRACT_END_DATEpicker"></mat-datepicker-toggle>
+          <mat-datepicker #CONTRACT_END_DATEpicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="standard-width inputSize ">
+          <input matInput [ngModel]='row.CONTRACT_RENT|number' placeholder="房屋租金單價" (ngModelChange)="newContractDetail.CONTRACT_RENT=this.programService.removeNumberPipeFormat($event);"
+            (keypress)="this.programService.onlyNumbers($event)" disabled>
+        </mat-form-field>
+        <mat-form-field class="standard-width ">
+          <input matInput [ngModel]='row.CONTRACT_MONTH_RENT_ORAMT|number' placeholder="每月房屋租金(原幣)" (ngModelChange)="newContractDetail.CONTRACT_MONTH_RENT_ORAMT=this.programService.removeNumberPipeFormat($event);"
+            (keypress)="this.programService.onlyNumbers($event)" disabled>
+        </mat-form-field>
+        <mat-form-field class="standard-width ">
+          <input matInput [ngModel]='row.CONTRACT_MONTH_RENT_TWD|number' (ngModelChange)="newContractDetail.CONTRACT_MONTH_RENT_TWD=this.programService.removeNumberPipeFormat($event);"
+            (keypress)="this.programService.onlyNumbers($event)" placeholder="每月房屋租金(TWD)" disabled>
+        </mat-form-field>
+        <button mat-mini-fab color="primary" (click)="row.isDisabled=true">
+          <span matTooltip="編輯">
+            <mat-icon>edit</mat-icon>
+          </span>
+        </button>
+      </div>
+
+      <div *ngIf="row.isDisabled ">
+        <mat-form-field class="standard-width">
+          <input matInput [matDatepicker]="CONTRACT_START_DATEpicker" placeholder="合約開始日" [(ngModel)]="row.CONTRACT_START_DATE">
+          <mat-datepicker-toggle matSuffix [for]="CONTRACT_START_DATEpicker"></mat-datepicker-toggle>
+          <mat-datepicker #CONTRACT_START_DATEpicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="standard-width">
+          <input matInput [matDatepicker]="CONTRACT_END_DATEpicker" placeholder="合約結束日" [(ngModel)]="row.CONTRACT_END_DATE">
+          <mat-datepicker-toggle matSuffix [for]="CONTRACT_END_DATEpicker"></mat-datepicker-toggle>
+          <mat-datepicker #CONTRACT_END_DATEpicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="standard-width inputSize input-readOnly">
+          <input matInput [ngModel]='row.CONTRACT_RENT|number' (ngModelChange)="row.CONTRACT_RENT=this.programService.removeNumberPipeFormat($event);"
+            (keypress)="this.programService.onlyNumbers($event)" placeholder="房屋租金單價" readonly>
+        </mat-form-field>
+        <!-- <mat-form-field class="standard-width ">
+          <input matInput [(ngModel)]='row.CONTRACT_MONTH_RENT_ORAMT' placeholder="每月房屋租金(原幣)">
+        </mat-form-field> -->
+        <mat-form-field class="standard-width">
+          <input matInput [ngModel]='row.CONTRACT_MONTH_RENT_ORAMT |number' (ngModelChange)="row.CONTRACT_MONTH_RENT_ORAMT=this.programService.removeNumberPipeFormat($event);change2SumDetail(masterData,row)"
+            (keypress)="this.programService.onlyNumbers($event)" placeholder="每月房屋租金(原幣)">
+        </mat-form-field>
+
+        <mat-form-field class="standard-width input-readOnly">
+          <input matInput [ngModel]='row.CONTRACT_MONTH_RENT_TWD|number' (ngModelChange)="row.CONTRACT_MONTH_RENT_TWD=this.programService.removeNumberPipeFormat($event);"
+            (keypress)="this.programService.onlyNumbers($event)" placeholder="每月房屋租金(TWD)" readonly>
+        </mat-form-field>
+
+        <button mat-mini-fab color="warn" (click)="row.isDisabled=false">
+          <span matTooltip="取消">
+            <mat-icon>clear</mat-icon>
+          </span>
+        </button>
+        <button mat-mini-fab color="primary" (click)="updateDetailData(row);row.isDisabled=false">
+          <span matTooltip="確認">
+            <mat-icon>send</mat-icon>
+          </span>
+        </button>
+        <button mat-mini-fab color="accent" (click)="TerminateDetailData(row);row.isDisabled=false">
+          <span matTooltip="刪除">
+            <mat-icon>delete</mat-icon>
+          </span>
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

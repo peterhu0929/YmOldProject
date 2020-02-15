@@ -1,0 +1,159 @@
+<div>
+  <!-- <mat-form-field>
+    <input matInput [(ngModel)]="inputUser.USER_ID" placeholder="員工代碼" (keypress)="notSpace($event)">
+  </mat-form-field> -->
+  <!-- <mat-form-field class="standard-width" [ngStyle]="{'width':'20%'}">
+    <input type="text" placeholder="幣別名稱" matInput [formControl]="myControl" [matAutocomplete]="auto" [(ngModel)]="inputCurrency.CURR_DESC"
+      (ngModelChange)="filterChangedDataTable(inputCurrency.CURR_DESC)"
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions| async " [value]="option.CURR_DESC">
+        ({{option.CURR_CD}})
+        <span [innerHTML]="highlightFiltered(option.CURR_DESC)"></span>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div> -->
+  <!-- <mat-form-field>
+  <input matInput [(ngModel)]="inputUser.inputValue" placeholder="請輸入員工代碼關鍵字" (keypress)="notSpace($event)" (ngModelChange)="filterChangedDataTable(inputUser.inputValue)">
+</mat-form-field>
+<mat-form-field class="standard-width">
+  <mat-select placeholder="部門別" [(ngModel)]="inputUser.DIVISION " required>
+    <mat-option *ngFor="let cp of DivisionGroup " [value]="cp.value ">
+      {{cp.value }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field class="standard-width">
+  <input matInput placeholder="起始日" [matDatepicker]="VDATE_FROMpicker" [(ngModel)]="inputUser.IN_DATE" required>
+  <mat-datepicker-toggle matSuffix [for]="VDATE_FROMpicker"></mat-datepicker-toggle>
+  <mat-datepicker #VDATE_FROMpicker></mat-datepicker>
+</mat-form-field>
+<mat-form-field class="standard-width">
+  <input matInput placeholder="結束日" [matDatepicker]="VDATE_TOpicker" [(ngModel)]="inputUser.UP_DATE" required>
+  <mat-datepicker-toggle matSuffix [for]="VDATE_TOpicker"></mat-datepicker-toggle>
+  <mat-datepicker #VDATE_TOpicker></mat-datepicker>
+</mat-form-field> -->
+  <!-- <button mat-fab color="accent" (click)="getUser()">
+  <span matTooltip="Search">
+    <mat-icon>search</mat-icon>
+  </span>
+</button> -->
+
+  <mat-paginator #paginator [length]="totalCount" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 15]">
+  </mat-paginator>
+
+  <div class="example-container ">
+    <table mat-table [dataSource]="CurrencyDataFilter" matSort #sortTableUser="matSort">
+      <ng-container matColumnDef="EDIT_BUTTON">
+        <th mat-header-cell *matHeaderCellDef>編輯</th>
+        <td mat-cell *matCellDef="let row">
+          <button *ngIf=!row.isDisabled mat-mini-fab color="accent" (click)="row.isDisabled=true">
+            <span matTooltip="Edit">
+              <mat-icon>edit</mat-icon>
+            </span>
+          </button>
+          <button *ngIf=row.isDisabled mat-mini-fab color="warn" (click)="row.isDisabled=false">
+            <span matTooltip="Cancel">
+              <mat-icon>clear</mat-icon>
+            </span>
+          </button>
+          <button *ngIf=row.isDisabled mat-mini-fab color="accent" (click)="updateSnackbar();row.isDisabled=false">
+            <span matTooltip="Confirm">
+              <mat-icon>send</mat-icon>
+            </span>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="DELETE_BUTTON">
+        <th mat-header-cell *matHeaderCellDef>停用</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-mini-fab color="warn" (click)="openCancelDialog(row.USER_KEY)" *ngIf="!deleteIcon(row)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="EDIT_BUTTON2">
+
+        <th mat-header-cell *matHeaderCellDef>編輯</th>
+        <td mat-cell *matCellDef="let row">
+          <!-- <button mat-button [matMenuTriggerFor]="menu">編輯</button> -->
+          <button mat-mini-fab [matMenuTriggerFor]="menu" color="accent" (click)="row.isDisabled=true">
+            <span matTooltip="Edit">
+              <mat-icon>edit</mat-icon>
+            </span>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="row.isDisabled=false">
+              <span>
+                <mat-icon>clear</mat-icon>
+              </span>取消
+            </button>
+            <button mat-menu-item (click)="updateCurrency(row);row.isDisabled=false">
+              <span>
+                <mat-icon>send</mat-icon>
+              </span>確認
+            </button>
+            <!-- <button mat-menu-item color="warn" (click)="openCancelDialog(row.USER_KEY);row.isDisabled=false">
+            <mat-icon>delete</mat-icon>Delete
+          </button> -->
+          </mat-menu>
+
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="DELETE_YN">
+        <th mat-header-cell *matHeaderCellDef>是否停用
+        </th>
+        <td mat-cell *matCellDef="let row" [ngStyle]="{'color':changeColor(row)}">
+          <mat-icon *ngIf="deleteIcon(row)">backspace</mat-icon>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="CURR_CD">
+        <th mat-header-cell *matHeaderCellDef>幣別</th>
+        <td mat-cell *matCellDef="let row">{{ row.CURR_CD }}</td>
+      </ng-container>
+      <ng-container matColumnDef="CURR_DESC">
+        <th mat-header-cell *matHeaderCellDef>幣別名稱</th>
+        <td mat-cell *matCellDef="let row">{{ row.CURR_DESC }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="CURR_2">
+        <th mat-header-cell *matHeaderCellDef>幣別簡稱</th>
+        <td mat-cell *matCellDef="let row">{{ row.CURR_2 }}</td>
+      </ng-container>
+      <ng-container matColumnDef="DIGITAL">
+        <th mat-header-cell *matHeaderCellDef>小數位</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-form-field>
+            <input matInput [(ngModel)]="row.DIGITAL" [disabled]="!row.isDisabled" (keypress)="notSpace($event)">
+          </mat-form-field>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="EFF_DATE">
+        <th mat-header-cell *matHeaderCellDef>生效日</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-form-field>
+            <input matInput [matDatepicker]="EFF_DATEpicker" [(ngModel)]="row.EFF_DATE" disabled>
+            <mat-datepicker-toggle matSuffix [for]="EFF_DATEpicker"></mat-datepicker-toggle>
+            <mat-datepicker #EFF_DATEpicker></mat-datepicker>
+          </mat-form-field>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="EXP_DATE">
+        <th mat-header-cell *matHeaderCellDef>截止日</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-form-field>
+            <input matInput [matDatepicker]="EXP_DATEpicker" [(ngModel)]="row.EXP_DATE" disabled>
+            <mat-datepicker-toggle matSuffix [for]="EXP_DATEpicker"></mat-datepicker-toggle>
+            <mat-datepicker #EXP_DATEpicker></mat-datepicker>
+          </mat-form-field>
+        </td>
+      </ng-container>
+      <tr mat-header-row
+        *matHeaderRowDef="['EDIT_BUTTON2','CURR_CD','CURR_DESC','CURR_2','DIGITAL','EFF_DATE','EXP_DATE'];"></tr>
+      <tr mat-row
+        *matRowDef="let Row; columns: ['EDIT_BUTTON2','CURR_CD','CURR_DESC','CURR_2','DIGITAL','EFF_DATE','EXP_DATE']">
+      </tr>
+
+    </table>
+  </div>

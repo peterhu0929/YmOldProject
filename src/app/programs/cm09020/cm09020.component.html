@@ -1,0 +1,217 @@
+<mat-form-field>
+  <mat-select placeholder="公司別" [(ngModel)]="EDIVoucher.COMPANY_ID" disabled>
+    <mat-option *ngFor="let cp of company" [value]="cp.value">
+      {{cp.text }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <input matInput [(ngModel)]="pCashTradeMasters.YEAR_P1" placeholder="製票年度" required>
+</mat-form-field>
+<!-- <mat-form-field>
+  <mat-select placeholder="傳票狀態" [(ngModel)]="EDIVoucher.PROSTATUS" required>
+    <mat-option *ngFor="let st of status" [value]="st.value">
+      {{st.text }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <mat-select placeholder="傳票種類" [(ngModel)]="EDIVoucher.VTYPE" required>
+    <mat-option *ngFor="let vt of voucher_type" [value]="vt.value">
+      {{vt.text }}
+    </mat-option>
+  </mat-select>
+</mat-form-field> -->
+<mat-form-field>
+  <input matInput [(ngModel)]="pCashTradeMasters.SEQREF" placeholder="交易序號" (keypress)="notSpace($event)">
+</mat-form-field>
+<!-- <mat-form-field>
+  <input matInput [(ngModel)]="EDIVoucher.VOUNO" placeholder="傳票號碼" (keypress)="notSpace($event)">
+</mat-form-field>
+<mat-form-field>
+  <input matInput [matDatepicker]="VDATE_FROMpicker" [(ngModel)]="EDIVoucher.VDATE_FROM" required>
+  <mat-datepicker-toggle matSuffix [for]="VDATE_FROMpicker"></mat-datepicker-toggle>
+  <mat-datepicker #VDATE_FROMpicker></mat-datepicker>
+</mat-form-field>
+<mat-form-field>
+  <input matInput [matDatepicker]="VDATE_TOpicker" [(ngModel)]="EDIVoucher.VDATE_TO" required>
+  <mat-datepicker-toggle matSuffix [for]="VDATE_TOpicker"></mat-datepicker-toggle>
+  <mat-datepicker #VDATE_TOpicker></mat-datepicker>
+</mat-form-field> -->
+
+
+<button mat-raised-button color="primary" (click)="QueryByRequire()">
+  查詢
+</button>
+<!-- <button mat-raised-button color="warn" (click)="QueryByCompany()">
+  產生EDI
+</button> -->
+
+<!-- <app-cm-filter-textbox (changed)="filterChanged($event) ">
+</app-cm-filter-textbox> -->
+
+<mat-form-field [ngStyle]="{'width':'60%'}">
+  <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto"
+    [(ngModel)]="EDIVoucher.COMPANY_ID">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.value">
+      <span [innerHTML]="highlightFiltered(option.text)"></span>
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+
+<div *ngIf="CashTradeMasters.length==0">
+  <!-- <h5>{{'SYS_NOT_EXISTS'|i18n:'Message'}}...</h5> -->
+</div>
+<div *ngIf="CashTradeMasters.length>0">
+  <h5>總共{{CashTradeMasters.length}}筆資料</h5>
+</div>
+<mat-tab-group [(selectedIndex)]="tabIndex" (focusChange)="tabFocusChange($event)">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <!-- <mat-icon>assignment_turned_in</mat-icon> -->
+      交易單查詢
+    </ng-template>
+
+    <div class=" row col-md-12 col-lg-12">
+      <mat-card *ngFor="let results of CashTradeMasters">
+
+        <mat-card-content>
+          <label>交易序號:</label>
+          <h3>{{results.SEQREF}}</h3>
+        </mat-card-content>
+        <mat-card-content>
+          <label>Trade Date:</label>
+          <h3>{{results.TRADE_DATE|date:'yyyy.MM.dd'}}</h3>
+        </mat-card-content>
+        <mat-card-content>
+          <label>Value Date:</label>
+          <h3>{{results.VALUE_DATE|date:'yyyy.MM.dd'}}</h3>
+        </mat-card-content>
+        <mat-card-content>
+          <label>買進幣別: </label>
+          <h3>{{results.BUY_CURRENCY}}</h3>
+        </mat-card-content>
+        <mat-card-content>
+          <label>賣出幣別: </label>
+          <h3>{{results.SELL_CURRENCY}}</h3>
+        </mat-card-content>
+        <mat-card-content>
+          <label>匯率:</label>
+          <h3>{{results.EXCHANGE_RATE}}</h3>
+        </mat-card-content>
+        <mat-card-content>
+          <label>承作銀行:</label>
+          <h3>{{results.EXCHANGE_BANK}}</h3>
+        </mat-card-content>
+
+        <mat-card-content>
+          <label>執行狀態:</label>
+          <h3>{{results.STATUS}}</h3>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" style="width:100%" (click)="viewDetail(results)">交易單細節</button>
+        </mat-card-actions>
+        <mat-card-actions>
+          <button mat-raised-button color="accent" style="width:100%" (click)="viewDetailByVoucher(results)">現金傳票細節</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <!-- <mat-icon>dvr</mat-icon> -->
+      交易單明細
+    </ng-template>
+    <button mat-raised-button color="warn" (click)="Back2Master()">回到該筆交易單</button>
+    <table class="table table-striped ">
+      <thead>
+        <tr>
+          <th>交易序號</th>
+          <th>交易人員</th>
+          <th>交割人員</th>
+          <th>產生傳票人員</th>
+          <!-- <th>終端機</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let Results of CashTradeMasterSelect" class="item-content">
+          <td>{{Results.SEQREF}}</td>
+          <td>{{Results.OPER_U_ID}}</td>
+          <td>{{Results.VOU_U_ID}}</td>
+          <td>{{Results.APPROVE_U_ID}}</td>
+          <!-- <td>{{detailResults.TERMINAL}}</td> -->
+          <!-- <td style="text-align:right">{{results.ORAMT| currency:'USD'}}</td> -->
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-striped ">
+      <thead>
+        <tr>
+          <th>種類</th>
+          <th>銀行別</th>
+          <th>價錢</th>
+          <th>終端機</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detailResults of CashTradeDetails" class="item-content">
+          <td>{{detailResults.TYPE}}</td>
+          <td>{{detailResults.BANK_CODE}}</td>
+          <td>{{detailResults.ORAMT}}</td>
+          <td>{{detailResults.TERMINAL}}</td>
+          <!-- <td style="text-align:right">{{results.ORAMT| currency:'USD'}}</td> -->
+        </tr>
+      </tbody>
+    </table>
+
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <!-- <mat-icon>dvr</mat-icon> -->
+      現金傳票明細
+    </ng-template>
+    <button mat-raised-button color="warn" (click)="Back2Master()">回到該筆交易單</button>
+    <table class="table table-striped ">
+      <thead>
+        <tr>
+          <th>年</th>
+          <th>月</th>
+          <th>現金製票號碼</th>
+          <th>現金傳票狀態</th>
+          <!-- <th>終端機</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let Results of FinVouchers" class="item-content">
+          <td>{{Results.YEAR}}</td>
+          <td>{{Results.MONTH}}</td>
+          <td>{{Results.CRENO}}</td>
+          <td>{{Results.PROSTATUS}}</td>
+          <!-- <td>{{detailResults.TERMINAL}}</td> -->
+          <!-- <td style="text-align:right">{{results.ORAMT| currency:'USD'}}</td> -->
+        </tr>
+      </tbody>
+    </table>
+    <!-- <table class="table table-striped ">
+      <thead>
+        <tr>
+          <th>種類</th>
+          <th>銀行別</th>
+          <th>價錢</th>
+          <th>終端機</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detailResults of CashTradeDetails" class="item-content">
+          <td>{{detailResults.TYPE}}</td>
+          <td>{{detailResults.BANK_CODE}}</td>
+          <td>{{detailResults.ORAMT}}</td>
+          <td>{{detailResults.TERMINAL}}</td>
+    </tr>
+    </tbody>
+    </table> -->
+
+  </mat-tab>
+</mat-tab-group>

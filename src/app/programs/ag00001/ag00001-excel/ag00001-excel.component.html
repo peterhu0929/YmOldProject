@@ -1,0 +1,34 @@
+<button mat-fab style="background: rgb(0, 208, 101)" (click)="excelexport.save()">
+  <span matTooltip="Export Excel">
+    <mat-icon>explicit</mat-icon>
+  </span>
+</button>
+<kendo-excelexport [data]="ContractData" fileName="AG00001合約清單.xlsx" [filterable]="true" #excelexport>
+  <kendo-excelexport-column-group title="陽明集團全球辦公室租賃" [headerCellOptions]="{ textAlign: 'center' }">
+    <kendo-excelexport-column-group title="據點數：{{totalCount}}
+  " [headerCellOptions]="{ textAlign: 'left' }">
+      <kendo-excelexport-column-group title="年租金總費用：{{ SUM_YEAR_RENT_AMT | number}}
+  " [headerCellOptions]="{ textAlign: 'left' }">
+        <kendo-excelexport-column field="SEQREF" title="合約代碼" [width]="100">
+        </kendo-excelexport-column>
+        <kendo-excelexport-column field="CITY" title="城市" [width]="150">
+        </kendo-excelexport-column>
+        <kendo-excelexport-column field="BUILDING_NAME" title="大樓名稱" [width]="150"></kendo-excelexport-column>
+        <kendo-excelexport-column field="vRENTED_START_DATE" title="租約開始日" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="vRENTED_END_DATE" title="租約到期日" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="AREA_UNIT" title="面積單位" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="RENTED_AREA" title="總承租面積" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="CURR" title="幣別" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="UNIT_RENT" title="房屋租金單價" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="MONTH_RENT" title="每月房屋租金" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="UNIT_MANAGE_FEE" title="管理費單價" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="MONTH_MANAGE_FEE" title="每月管理費" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="CAR_SPACE_AMT" title="承租車位數" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="UNIT_RENT_CAR_SPACE" title="每席車位租金單價" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="MONTH_RENT_CAR_SPACE" title="每月車位租金" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="RENTED_AREA_P" title="總承租面積(坪)" [width]="100"></kendo-excelexport-column>
+        <kendo-excelexport-column field="MONTH_RENT_AMT" title="月租金(TWD)" [width]="100"></kendo-excelexport-column>
+      </kendo-excelexport-column-group>
+    </kendo-excelexport-column-group>
+  </kendo-excelexport-column-group>
+</kendo-excelexport>

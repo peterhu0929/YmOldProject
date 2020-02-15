@@ -1,0 +1,58 @@
+ /**
+  * Noto Sans TC (Chinese_traditional) v4 http://www.google.com/fonts
+  */
+
+/* noto-sans-tc-100 - chinese-traditional_latin */
+@font-face {
+  font-family: 'Noto Sans TC';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Noto Sans TC Thin'), local('NotoSansTC-Thin'),
+       url('../fonts/notosanstc/noto-sans-tc-v4-chinese-traditional_latin-100.woff2') format('woff2'); /* Chrome 26+, Opera 23+, Firefox 39+ */
+  font-display: swap;
+}
+/* noto-sans-tc-300 - chinese-traditional_latin */
+@font-face {
+  font-family: 'Noto Sans TC';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Noto Sans TC Light'), local('NotoSansTC-Light'),
+       url('../fonts/notosanstc/noto-sans-tc-v4-chinese-traditional_latin-300.woff2') format('woff2'); /* Chrome 26+, Opera 23+, Firefox 39+ */
+  font-display: swap;
+}
+/* noto-sans-tc-regular - chinese-traditional_latin */
+@font-face {
+  font-family: 'Noto Sans TC';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Noto Sans TC Regular'), local('NotoSansTC-Regular'),
+       url('../fonts/notosanstc/noto-sans-tc-v4-chinese-traditional_latin-regular.woff2') format('woff2'); /* Chrome 26+, Opera 23+, Firefox 39+ */
+  font-display: swap;
+}
+/* noto-sans-tc-500 - chinese-traditional_latin */
+@font-face {
+  font-family: 'Noto Sans TC';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Noto Sans TC Medium'), local('NotoSansTC-Medium'),
+       url('../fonts/notosanstc/noto-sans-tc-v4-chinese-traditional_latin-500.woff2') format('woff2'); /* Chrome 26+, Opera 23+, Firefox 39+ */
+  font-display: swap;
+}
+/* noto-sans-tc-700 - chinese-traditional_latin */
+@font-face {
+  font-family: 'Noto Sans TC';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Noto Sans TC Bold'), local('NotoSansTC-Bold'),
+       url('../fonts/notosanstc/noto-sans-tc-v4-chinese-traditional_latin-700.woff2') format('woff2'); /* Chrome 26+, Opera 23+, Firefox 39+ */
+  font-display: swap;
+}
+/* noto-sans-tc-900 - chinese-traditional_latin */
+@font-face {
+  font-family: 'Noto Sans TC';
+  font-style: normal;
+  font-weight: 900;
+  src: local('Noto Sans TC Black'), local('NotoSansTC-Black'),
+       url('../fonts/notosanstc/noto-sans-tc-v4-chinese-traditional_latin-900.woff2') format('woff2'); /* Chrome 26+, Opera 23+, Firefox 39+ */
+  font-display: swap;
+}

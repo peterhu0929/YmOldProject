@@ -1,0 +1,66 @@
+<!-- <kendo-pdf-export #pdf paperSize="A4" margin="1cm">
+  <div class="pdf-rotate" style="text-align:center">
+    <h2>陽明集團全球辦公室租賃</h2>
+    <fieldset>
+      <div style="text-align:left">總據點數：98
+      </div>
+      <div style="text-align:left">
+        年租金總費用：254,380,380.646
+      </div>
+      <div>
+        <table border=1 align=left width=100%>
+          <tr>
+            <td>合約代碼</td>
+            <td>城市</td>
+            <td>大樓名稱</td>
+            <td>租約開始日</td>
+            <td>租約到期日</td>
+            <td>面積單位</td>
+            <td>總承租面積</td>
+            <td>幣別</td>
+            <td>房屋租金單價</td>
+            <td>每月房屋租金</td>
+            <td>管理費單價</td>
+            <td>每月管理費</td>
+            <td>承租車位數</td>
+            <td>每席車位租金單價</td>
+            <td>每月車位租金</td>
+            <td>總承租面積(坪)</td>
+            <td>月租金(TWD)</td>
+          </tr>
+          <tr *ngFor="let item of pData" class="item-content">
+            <td>{{item.SEQREF}}</td>
+            <td>{{item.SUB_COMPANY_NAME}}</td>
+            <td>{{item.BUILDING_NAME}}</td>
+            <td>{{item.RENTED_START_DAY}}</td>
+            <td>{{item.RENTED_END_DAY}}</td>
+            <td>{{item.AREA_UNIT}}</td>
+            <td style-align="right">
+              {{item.RENTED_AREA}}
+            </td>
+            <td> {{item.CURR}}</td>
+            <td> {{item.UNIT_RENT}}</td>
+            <td> {{item.MONTH_RENT}}</td>
+            <td> {{item.UNIT_MANAGE_FEE}}</td>
+            <td> {{item.MONTH_MANAGE_FEE}}</td>
+            <td> {{item.CAR_SPACE_AMT}}</td>
+            <td> {{item.UNIT_RENT_CAR_SPACE}}</td>
+            <td> {{item.MONTH_RENT_CAR_SPACE}}</td>
+            <td> {{item.RENTED_AREA_P}}</td>
+            <td> {{item.MONTH_RENT_AMT}}</td>
+          </tr>
+        </table>
+      </div>
+    </fieldset>
+  </div>
+</kendo-pdf-export> -->
+
+<!-- <div style="text-align: right">
+  <button mat-raised-button color="warn" (click)="pdf.saveAs('AG00001.pdf')" [ngStyle]="{'margin': '20px'}">
+    產生PDF...
+    <mat-icon>picture_as_pdf</mat-icon>
+  </button>
+  <button mat-raised-button color="primary" mat-dialog-close>
+    關閉
+  </button>
+</div> -->

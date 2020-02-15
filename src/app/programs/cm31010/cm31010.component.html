@@ -1,0 +1,214 @@
+<mat-form-field>
+  <mat-select placeholder="COMPANY_ID" [(ngModel)]="pFinBank.COMPANY_ID" required>
+    <mat-option *ngFor="let cp of company" [value]="cp.value">
+      {{cp.text }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field class="example-full-width">
+  <input matInput #BankDesc maxlength="10" type=" text " name="filter" placeholder="BANK_DESC"
+    (keypress)="notSpace($event)" [(ngModel)]="pFinBank.BANK_DESC" (ngModelChange)="getFinBankDataBankDesc(pFinBank)" />
+  <mat-hint align="end">至少2碼</mat-hint>
+</mat-form-field>
+
+<mat-form-field class="example-full-width">
+  <input matInput #BankCode maxlength="10" type=" text " name="filter" placeholder="BANK_CODE"
+    (keypress)="notSpace($event)" [(ngModel)]="pFinBank.BANK_CODE" (ngModelChange)="getFinBankDataBankCode(pFinBank)" />
+  <mat-hint align="end">至少2碼</mat-hint>
+</mat-form-field>
+
+
+<!-- <mat-form-field [ngStyle]="{'width':'50%'}">
+  <mat-select placeholder="銀行代碼與名稱" [(ngModel)]="pFinBank.BANK_CODE"
+    (ngModelChange)="filterChangedFinBankBankCode(pFinBank.BANK_CODE)">
+    <mat-option *ngFor="let cp of finbanks" [value]="cp.BANK_CODE">
+      ({{cp.BANK_CODE}})
+      <span [innerHTML]="highlightFiltered(cp.BANK_DESC)"></span>
+    </mat-option>
+  </mat-select>
+</mat-form-field> -->
+
+<!-- <mat-form-field [ngStyle]="{'width':'50%'}">
+  <input type="text" placeholder="請輸入銀行名或帳號" matInput [formControl]="myControl" [matAutocomplete]="auto" [(ngModel)]="pFinBank.BANK_DESC"
+    (ngModelChange)="filterChangedFinBankBankDesc(pFinBank.BANK_DESC)">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of filteredOptions| async " [value]="option.BANK_DESC">
+      ({{option.BANK_CODE}})
+      <span [innerHTML]="highlightFiltered(option.BANK_DESC)"></span>
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field> -->
+
+<button mat-fab color="warn" (click)="openAddDialog()">
+  <span matTooltip="新增">
+    <mat-icon>add</mat-icon>
+  </span>
+</button>
+
+
+
+<button mat-raised-button style="background: rgb(0, 208, 101)" (click)="save2Excel(excelexport)"
+  [ngStyle]="{'margin': '20px'}">Export
+  <mat-icon>explicit</mat-icon>
+</button>
+<kendo-excelexport [data]="filteredResults" fileName="CM31010銀行基本資料.xlsx" [filterable]="true" #excelexport>
+  <kendo-excelexport-column field="BANK_CODE" title="銀行代碼" [width]="100">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="BANK_DESC" title="銀行名稱及戶名" [width]="300">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="BANK_ACCOUNT" title="銀行帳號" [width]="80">
+  </kendo-excelexport-column>
+  <kendo-excelexport-column field="BANK_TYPE" title="銀行戶別" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="CURR_CD" title="幣別" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="ACCTNUM" title="會計科目" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="COUNTRY" title="國家" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="CUST_CODE" title="廠商代碼" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="CITI_EDI" title="CITI EDI" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="FLEX_1" title="自動報收" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="FLEX_2" title="MT940" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="FLEX_3" title="MT942" [width]="100"></kendo-excelexport-column>
+  <kendo-excelexport-column field="EFF_DATE" title="生效日" [width]="200"></kendo-excelexport-column>
+  <kendo-excelexport-column field="EXP_DATE" title="截止日" [width]="200"></kendo-excelexport-column>
+</kendo-excelexport>
+
+<!-- <button mat-fab color="primary" (click)="test()">
+  <span matTooltip="TEST">
+    <mat-icon>test</mat-icon>
+  </span>
+</button> -->
+
+
+
+<!-- <div class=" fixedRight4Google ">
+  <button mat-fab color="accent" md-icon-button (click)="openAddDialog()">
+    <i class="material-icons ">add</i>
+  </button>
+</div> -->
+
+<div *ngIf="filteredResults.length==0 ">
+  <!-- <h5>{{'SYS_NOT_EXISTS'|i18n:'Message'}}...</h5> -->
+  <h5>請先輸入銀行名稱或銀行代碼</h5>
+</div>
+<div *ngIf="filteredResults.length>0">
+  <h5>總共{{filteredResults.length}}筆資料</h5>
+</div>
+
+
+<div>
+  <mat-card *ngFor="let results of filteredResults" [tabindex]="results.BANK_CODE" (click)="tolog(results.BANK_CODE)">
+    <mat-card-content>
+      <!-- <label>銀行代碼:</label> -->
+      <!-- <label>{{'BANK_CODE'|i18n}}</label> -->
+      <h4>{{results.BANK_CODE}}</h4>
+      <!-- <mat-form-field>
+        <input matInput [(ngModel)]="results.BANK_CODE" name="BANK_CODE" placeholder="銀行代碼" readonly>
+      </mat-form-field> -->
+    </mat-card-content>
+    <mat-card-content>
+      <!-- <label>銀行名稱及戶名:</label>
+      <h4>{{results.BANK_DESC}}</h4> -->
+      <mat-form-field [ngStyle]="{'width':'100%'}">
+        <input matInput [(ngModel)]="results.BANK_DESC" name="BANK_DESC" placeholder="BANK_DESC"
+          [disabled]="!results.isDisabled">
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-content>
+      <!-- <label>銀行帳號:</label>
+      <h4>{{results.BANK_ACCOUNT }}</h4> -->
+      <mat-form-field>
+        <input matInput [(ngModel)]="results.BANK_ACCOUNT" name="BANK_ACCOUNT" placeholder="ACCTNO"
+          [disabled]="!results.isDisabled">
+      </mat-form-field>
+      <!-- </mat-card-content>
+    <mat-card-content> -->
+      <!-- <label>銀行戶別: </label>
+      <h4>{{results.BANK_TYPE}}</h4> -->
+      <!-- <mat-form-field>
+        <input matInput [(ngModel)]="results.BANK_TYPE" name="BANK_TYPE" placeholder="銀行戶別" [disabled]="!results.isDisabled">
+      </mat-form-field> -->
+      <mat-form-field>
+        <mat-select placeholder="BANK_TYPE" [(ngModel)]="results.BANK_TYPE" name="BANK_TYPE"
+          [disabled]="!results.isDisabled">
+          <mat-option *ngFor="let cp of banktype " [value]="cp.VALUE">
+            {{cp.DESCRIPTION}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-content>
+      <!-- <label>幣別: </label>
+      <h4>{{results.CURR_CD}}</h4> -->
+      <!-- <mat-form-field>
+        <input matInput [(ngModel)]="results.CURR_CD" name="CURR_CD" placeholder="幣別" [disabled]="!results.isDisabled">
+      </mat-form-field> -->
+      <mat-form-field>
+        <mat-select placeholder="BANK_CURR_CD" [(ngModel)]="results.CURR_CD" name="CURR_CD"
+          [disabled]="!results.isDisabled">
+          <mat-option *ngFor="let cp of currency " [value]="cp.CURR_CD">
+            {{cp.CURR_CD}}({{cp.CURR_DESC}})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- </mat-card-content>
+    <mat-card-content> -->
+      <!-- <label>會計科目:</label>
+      <h4>{{results.ACCTNUM}}</h4> -->
+      <mat-form-field>
+        <input matInput [(ngModel)]="results.ACCTNUM" name="ACCTNUM" placeholder="ACCT_CODE"
+          [disabled]="!results.isDisabled">
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-content>
+      <mat-form-field>
+        <input matInput [matDatepicker]="EFF_DATEpicker" [(ngModel)]="results.EFF_DATE" name="EFF_DATE"
+          placeholder="生效日" [disabled]="!results.isDisabled">
+        <mat-datepicker-toggle matSuffix [for]="EFF_DATEpicker"></mat-datepicker-toggle>
+        <mat-datepicker #EFF_DATEpicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [matDatepicker]="EXP_DATEpicker" [(ngModel)]="results.EXP_DATE" name="EXP_DATE"
+          placeholder="截止日" [disabled]="!results.isDisabled">
+        <mat-datepicker-toggle matSuffix [for]="EXP_DATEpicker"></mat-datepicker-toggle>
+        <mat-datepicker #EXP_DATEpicker></mat-datepicker>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-content>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+          </mat-panel-title>
+          <mat-panel-description>
+            銀行相關設定
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-checkbox [(ngModel)]="results.CITI_EDI_BOOL" [disabled]="!results.isDisabled">接收花旗 EDI</mat-checkbox>
+        <mat-checkbox [(ngModel)]="results.FLEX_1_BOOL" [disabled]="!results.isDisabled">報收傳票是否為申請中</mat-checkbox>
+        <mat-checkbox [(ngModel)]="results.FLEX_2_BOOL" [disabled]="!results.isDisabled">是否接收花旗 EDI940</mat-checkbox>
+        <mat-checkbox [(ngModel)]="results.FLEX_3_BOOL" [disabled]="!results.isDisabled">是否接收花旗 EDI942</mat-checkbox>
+        <mat-checkbox [(ngModel)]="results.FLEX_4_BOOL" [disabled]="!results.isDisabled">該幣別預設付款銀行</mat-checkbox>
+      </mat-expansion-panel>
+    </mat-card-content>
+
+
+    <mat-card-actions>
+
+      <button *ngIf=!results.isDisabled mat-raised-button color="warn" (click)="results.isDisabled=true">更新</button>
+      <button *ngIf=results.isDisabled mat-raised-button color="warn" (click)="results.isDisabled=false">取消更新</button>
+      <button *ngIf=results.isDisabled mat-raised-button color="accent"
+        (click)="results.isDisabled=false;UpdateData(results)">確認更新</button>
+      <button mat-raised-button color="primary" (click)="viewDetail(results)">查看餘額表</button>
+
+    </mat-card-actions>
+    <!-- <div>
+      <button class="fixedRight4Google" mat-fab color="warn" (click)="openAddDialog()">
+        <span matTooltip="新增">
+          <mat-icon>add</mat-icon>
+        </span>
+      </button>
+    </div> -->
+
+  </mat-card>
+
+</div>

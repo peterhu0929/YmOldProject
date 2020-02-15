@@ -1,0 +1,130 @@
+  @import '~@angular/material/theming';
+  /*標頭底線顏色*/
+
+  .table thead tr th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #da0860;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.75rem;
+    vertical-align: top; // border-top: 1px solid #c2cfd6;
+  }
+
+  /*儲存格單列變色*/
+
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(163, 7, 7, 0.05);
+  }
+
+  .item-content:hover {
+    color: #000000;
+    background-color: #cccccc;
+    height: 100%;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .mat-card {
+    // background: $rent-mat-card-backgroud-color;
+    width: 25%;
+    display: inline-grid;
+    margin: 20px;
+  }
+
+  .rentCard {
+    width: auto;
+    display: grid;
+  }
+
+  mat-card:focus {
+    background: lightblue;
+  }
+
+  .example-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 300px;
+  }
+
+  .mat-table {
+    overflow: auto;
+    max-height: 800px;
+  }
+
+  // Collin支援DataTable標頭固定
+  .mat-header-cell {
+    top: 0;
+    position: sticky;
+    z-index: 1;
+    background-color: white;
+  }
+
+  // Rocky支援右下角button
+  .create-button-part {
+    padding-right: 20px;
+    padding-bottom: 20px;
+    float: right;
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    z-index: 10;
+  }
+
+  .standard-width {
+    // width: 50%;
+    margin: 8px;
+  }
+
+  .standard-closed {
+    text-align: right; // position: top;
+
+  }
+
+  tr:hover {
+    // color: #000000;
+    background-color: rgba(255, 0, 0, 0.2); // text-decoration: none;
+    // font-size: 16px;
+    // font-weight: bold;
+  }
+
+  tr.active {
+    background-color: rgba(255, 0, 0, 0.2);
+  }
+
+  .example-container {
+    height: 600px; // 表格高度
+    width: 1900px; // 表格寬度
+    overflow: auto;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  .inputSize {
+    width: 100px;
+  }
+
+  .mat-card {
+    background: lightskyblue;
+    width: 15%;
+    display: inline-grid;
+    margin: 20px;
+  }
+
+  //input欄位為reoadOnly
+  .input-readOnly .mat-form-field-infix {
+    background: gainsboro
+  }
+
+  .centerCol {
+    text-align: center;
+  }
+
+  .rightCol {
+    text-align: right;
+  }

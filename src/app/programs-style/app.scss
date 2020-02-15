@@ -1,0 +1,21 @@
+app-cm31010,
+app-cm31010-edit,
+app-cm31070,
+app-cm09020,
+app-cm21010,
+app-cm21010component-dialog,
+app-ag00001component-detail,
+app-cm09005,
+app-cm09005component-detail,
+app-cm09060 {
+  @import'./basic.scss';
+}
+
+app-ag00001,
+app-ag00001-attach-detail {
+  @import'./ag00001.scss';
+}
+
+// app-cm31070 {
+//   @import './basic.scss';
+// }

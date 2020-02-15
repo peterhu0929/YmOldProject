@@ -1,0 +1,51 @@
+<button mat-fab style="background: rgb(0, 208, 101)" (click)="save2Excel(excelexport)">
+  <span matTooltip="Export Excel">
+    <mat-icon>explicit</mat-icon>
+  </span>
+</button>
+<kendo-excelexport [data]="SummaryExcelData" fileName="CM09060外匯即期交易統計.xlsx" [filterable]="true" #excelexport>
+  <kendo-excelexport-column-group title="{{this.DATE_S|date:'yyyy/MM/dd'}}~{{this.DATE_E|date:'yyyy/MM/dd'}}"
+    [headerCellOptions]="{ textAlign: 'center' }">
+    <kendo-excelexport-column field="BANK_NAME" title="銀行名稱" [width]="100">
+      <ng-template kendoExcelExportFooterTemplate>
+        Total
+      </ng-template>
+    </kendo-excelexport-column>
+    <kendo-excelexport-column field="EQ_USD" title="實質交割USD" [width]="150" [footerCellOptions]="{ textAlign: 'right' }">
+      <ng-template kendoExcelExportFooterTemplate>
+        {{ this.sumDatas.SUM_TRADE_TOTAL}}
+      </ng-template>
+    </kendo-excelexport-column>
+
+    <kendo-excelexport-column field="SETTLE_TOTAL" title="差額交割USD" [width]="150" [footerCellOptions]="{ textAlign: 'right' }">
+      <ng-template kendoExcelExportFooterTemplate>
+        {{ this.sumDatas.SUM_SETTLE_TOTAL}}
+      </ng-template>
+    </kendo-excelexport-column>
+
+    <kendo-excelexport-column field="TOTAL" title="合計金額" [width]="100" [cellOptions]="{ textAlign: 'right' }"
+      [footerCellOptions]="{ textAlign: 'right' }">
+      <ng-template kendoExcelExportFooterTemplate>
+        {{ this.sumDatas.SUM_TOTAL}}
+      </ng-template>
+    </kendo-excelexport-column>
+    <kendo-excelexport-column field="EXCEL_TOTAL_P" title="合計金額%" [width]="100" [cellOptions]="{ textAlign: 'right' }"
+      [footerCellOptions]="{ textAlign: 'right' }">
+      <ng-template kendoExcelExportFooterTemplate>
+        100%
+      </ng-template>
+    </kendo-excelexport-column>
+    <kendo-excelexport-column field="COUNT" title="合計次數" [width]="100" [cellOptions]="{ textAlign: 'right' }"
+      [footerCellOptions]="{ textAlign: 'right' }">
+      <ng-template kendoExcelExportFooterTemplate>
+        {{this.sumDatas.SUM_COUNT}}
+      </ng-template>
+    </kendo-excelexport-column>
+    <kendo-excelexport-column field="EXCEL_COUNT_P" title="合計次數%" [width]="100" [cellOptions]="{ textAlign: 'right' }"
+      [footerCellOptions]="{ textAlign: 'right' }">
+      <ng-template kendoExcelExportFooterTemplate>
+        100%
+      </ng-template>
+    </kendo-excelexport-column>
+  </kendo-excelexport-column-group>
+</kendo-excelexport>

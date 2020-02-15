@@ -1,0 +1,13 @@
+body {
+  border: 0px;
+  margin-top: 55px;
+  font-family: "Noto Sans TC", "Roboto", "Microsoft JHengHei UI", "Microsoft JHengHei", "微軟正黑體", MingLiU, "細明體", sans-serif;
+}
+
+router-outlet~* {
+  position: inherit;
+  height: 100%;
+  width: 100%;
+}
+
+@import "./app/programs-style/app.scss";

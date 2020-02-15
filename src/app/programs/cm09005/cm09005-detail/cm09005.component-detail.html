@@ -1,0 +1,510 @@
+<h2 mat-dialog-title>{{action}}</h2>
+
+<!-- {{ngSettleDetailData.TRADE_USER}} -->
+
+<!-- <div *ngFor="let ngSettleDetailData of ngSettleDetailData"> -->
+<div class="standard-closed">
+  <button mat-icon-button color="accent" mat-dialog-close (click)="ngSettleDetailData.isDisabled=false;">
+    <span matTooltip="Close">
+      <mat-icon>clear
+      </mat-icon>
+    </span>
+  </button>
+</div>
+
+
+
+
+
+
+
+<mat-chip-list>
+  <!-- <mat-chip color="primary" selected="true">{{ngSettleDetailData.SEQREF}}</mat-chip> -->
+  <!-- <mat-chip color="primary" selected="true">{{ngSettleDetailData.OP_BANK}}</mat-chip> -->
+  <!-- <mat-chip color="primary" selected="true">{{ngSettleDetailData.SETTLEMENT_AMT}}</mat-chip> -->
+</mat-chip-list>
+
+<mat-form-field class="inputSize">
+  <input matInput [matDatepicker]="TRADE_DATEpicker" [(ngModel)]="ngSettleDetailData.TRADE_DATE" placeholder="交易日期"
+    [disabled]="!ngSettleDetailData.isDisabled">
+  <mat-datepicker-toggle matSuffix [for]="TRADE_DATEpicker"></mat-datepicker-toggle>
+  <mat-datepicker #TRADE_DATEpicker></mat-datepicker>
+</mat-form-field>
+
+<mat-form-field class="inputSize standard-width">
+  <input matInput [matDatepicker]="SETTLEMENT_DATEpicker" [(ngModel)]="ngSettleDetailData.SETTLEMENT_DATE"
+    placeholder="交割日期" [disabled]="!ngSettleDetailData.isDisabled">
+  <mat-datepicker-toggle matSuffix [for]="SETTLEMENT_DATEpicker"></mat-datepicker-toggle>
+  <mat-datepicker #SETTLEMENT_DATEpicker></mat-datepicker>
+</mat-form-field>
+<mat-form-field class="inputSize standard-width">
+  <mat-select [(ngModel)]="ngSettleDetailData.OP_BANK" placeholder="承作銀行" [disabled]="!ngSettleDetailData.isDisabled"
+    required>
+    <mat-option>--</mat-option>
+    <mat-option *ngFor="let cp of cTradeBankData " [value]="cp.BANK_NAME ">
+      {{cp.BANK_NAME }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<!-- <mat-form-field class="inputSize standard-width">
+  <mat-select [(ngModel)]="ngSettleDetailData.SETTLEMENT_CURRENCY" placeholder="幣別" [disabled]="!ngSettleDetailData.isDisabled">
+    <mat-option *ngFor="let cp of cCurrency " [value]="cp.CURR_CD">
+      {{cp.CURR_CD}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field [ngStyle]="{'width':'10%'}">
+  <input type="text" matInput [formControl]="currControl" [matAutocomplete]="auto2" placeholder="幣別" [(ngModel)]="ngSettleDetailData.SETTLEMENT_CURRENCY"
+    onInput="this.value=this.value.toUpperCase()">
+  <mat-autocomplete #auto2="matAutocomplete">
+    <mat-option *ngFor="let option of automCompleteCurrency| async " [value]="option.CURR_CD">
+      {{option.CURR_CD}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field> -->
+
+<mat-form-field [ngStyle]="{'width':'10%'}">
+  <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" placeholder="存入銀行"
+    [(ngModel)]="ngSettleDetailData.DP_BANK" (ngModelChange)="DpBankMapping(ngSettleDetailData)"
+    onInput="this.value=this.value.toUpperCase()">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of filteredOptions| async " [value]="option.BANK_CODE">
+      {{option.BANK_CODE}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+{{ngSettleDetailData.FLEX_1}}
+<mat-form-field class="standard-width">
+  <mat-select [(ngModel)]="ngSettleDetailData.TRADE_USER" (ngModelChange)="TradeVouUserMapping(ngSettleDetailData)"
+    placeholder="交易人員" [disabled]="!ngSettleDetailData.isDisabled">
+    <mat-option *ngFor="let cp of cTradeVouUser " [value]="cp.OPER_U_ID">
+      {{cp.OPER_U_ID|code2Name:'FFCM'}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<!-- <mat-form-field>
+    <input matInput [(ngModel)]="ngSettleDetailData.SETTLEMENT_USER" [disabled]=true>
+  </mat-form-field> -->
+交割人員：{{ngSettleDetailData.SETTLEMENT_USER|code2Name:'FFCM'}}
+
+<br>
+<div>
+
+  <h4 *ngIf="!ngSettleDetailData.isDisabled">
+    SELL {{ngSettleDetailData.T1_SELL_CURRENCY}}{{ngSettleDetailData.T1_SELL_AMT| number}} /
+    BUY {{ngSettleDetailData.T1_BUY_CURRENCY}}{{ngSettleDetailData.T1_BUY_AMT| number}} ; FX
+    Rate {{ngSettleDetailData.T1_SELL_EXCHANGE_RATE}}
+  </h4>
+  <h4 *ngIf="!ngSettleDetailData.isDisabled">
+    BUY {{ngSettleDetailData.T2_BUY_CURRENCY}}{{ngSettleDetailData.T2_BUY_AMT| number}} /
+    SELL {{ngSettleDetailData.T2_SELL_CURRENCY}}{{ngSettleDetailData.T2_SELL_AMT| number}} ; FX
+    Rate {{ngSettleDetailData.T2_BUY_EXCHANGE_RATE}}
+  </h4>
+  <!-- <h4 *ngIf="!ngSettleDetailData.isDisabled">
+    {{ngSettleDetailData.SUMMARY}}
+  </h4> -->
+  <div *ngIf="ngSettleDetailData.isDisabled">
+    <mat-chip>SELL </mat-chip>
+
+    <!-- <mat-form-field [ngStyle]="{'width':'10%'}" class="standard-width">
+      <input matInput [(ngModel)]="ngSettleDetailData.T1_SELL_CURRENCY" placeholder="Sell Curr">
+    </mat-form-field> -->
+
+    <mat-form-field class="standard-width" [ngStyle]="{'width':'10%'}">
+      <input type="text" matInput [formControl]="currControl_T1Sell" [matAutocomplete]="auto2" placeholder="Sell Curr"
+        [(ngModel)]="ngSettleDetailData.T1_SELL_CURRENCY" onInput="this.value=this.value.toUpperCase()">
+      <mat-autocomplete #auto2="matAutocomplete">
+        <mat-option *ngFor="let option of autoCurr_T1Sell| async " [value]="option.CURR_CD">
+          {{option.CURR_CD}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field [ngStyle]="{'width':'10%'}" class="standard-width">
+      <input matInput [ngModel]="ngSettleDetailData.T1_SELL_AMT| number"
+        (ngModelChange)="ngSettleDetailData.T1_SELL_AMT=removeNumberPipeFormat($event)" (keypress)="onlyNumbers($event)"
+        placeholder=" Sell AMT">
+    </mat-form-field>
+    <mat-checkbox color="warn" (click)="addT1_SELL_AMT(ngSettleDetailData)"></mat-checkbox>
+    <mat-chip class="standard-width">BUY</mat-chip>
+
+    <!-- <mat-form-field [ngStyle]="{'width':'10%'}" class="standard-width">
+      <input matInput [(ngModel)]="ngSettleDetailData.T1_BUY_CURRENCY" placeholder="Buy Curr">
+    </mat-form-field> -->
+
+    <mat-form-field [ngStyle]="{'width':'10%'}" class="standard-width">
+      <input type="text" matInput [formControl]="currControl_T1Buy" [matAutocomplete]="auto3" placeholder="Buy Curr"
+        [(ngModel)]="ngSettleDetailData.T1_BUY_CURRENCY" onInput="this.value=this.value.toUpperCase()">
+      <mat-autocomplete #auto3="matAutocomplete">
+        <mat-option *ngFor="let option of autoCurr_T1Buy| async " [value]="option.CURR_CD">
+          {{option.CURR_CD}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field [ngStyle]="{'width':'10%'}" class="standard-width">
+      <input matInput [ngModel]="ngSettleDetailData.T1_BUY_AMT| number"
+        (ngModelChange)="ngSettleDetailData.T1_BUY_AMT=removeNumberPipeFormat($event)" (keypress)="onlyNumbers($event)"
+        placeholder="Buy AMT">
+    </mat-form-field>
+    <mat-checkbox color="warn" (click)="addT1_BUY_AMT(ngSettleDetailData)"></mat-checkbox>
+    <mat-form-field [ngStyle]="{'width':'15%','margin': '30px'}">
+      <input matInput [(ngModel)]="ngSettleDetailData.T1_SELL_EXCHANGE_RATE" placeholder="Sell Exchange Rate">
+    </mat-form-field>
+  </div>
+  <div *ngIf="ngSettleDetailData.isDisabled">
+    <mat-chip>BUY</mat-chip>
+    <!-- <mat-form-field [ngStyle]="{'width':'10%'}" class="standard-width">
+      <input matInput [(ngModel)]="ngSettleDetailData.T2_BUY_CURRENCY" placeholder="Buy Curr">
+    </mat-form-field> -->
+    <mat-form-field [ngStyle]="{'width':'10%'}" class="standard-width">
+      <input type="text" matInput [formControl]="currControl_T2Buy" [matAutocomplete]="auto4" placeholder="Buy Curr"
+        [(ngModel)]="ngSettleDetailData.T2_BUY_CURRENCY" onInput="this.value=this.value.toUpperCase()">
+      <mat-autocomplete #auto4="matAutocomplete">
+        <mat-option *ngFor="let option of autoCurr_T2Buy| async " [value]="option.CURR_CD">
+          {{option.CURR_CD}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field [ngStyle]="{'width':'10%'}" class="standard-width">
+      <input matInput [ngModel]="ngSettleDetailData.T2_BUY_AMT| number"
+        (ngModelChange)="ngSettleDetailData.T2_BUY_AMT=removeNumberPipeFormat($event)" (keypress)="onlyNumbers($event)"
+        placeholder="Buy AMT">
+    </mat-form-field>
+    <mat-checkbox color="warn" (click)="addT2_BUY_AMT(ngSettleDetailData)"></mat-checkbox>
+    <mat-chip class="standard-width"> SELL</mat-chip>
+
+    <!-- <mat-form-field [ngStyle]="{'width':'10%'}" class="standard-width">
+      <input matInput [(ngModel)]="ngSettleDetailData.T2_SELL_CURRENCY" placeholder="Sell Curr">
+    </mat-form-field> -->
+
+    <mat-form-field [ngStyle]="{'width':'10%'}" class="standard-width">
+      <input type="text" matInput [formControl]="currControl_T2Sell" [matAutocomplete]="auto5" placeholder="Sell Curr"
+        [(ngModel)]="ngSettleDetailData.T2_SELL_CURRENCY" onInput="this.value=this.value.toUpperCase()">
+      <mat-autocomplete #auto5="matAutocomplete">
+        <mat-option *ngFor="let option of autoCurr_T2Sell| async " [value]="option.CURR_CD">
+          {{option.CURR_CD}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+
+
+
+    <mat-form-field [ngStyle]="{'width':'10%'}" class="standard-width">
+      <input matInput [ngModel]="ngSettleDetailData.T2_SELL_AMT| number"
+        (ngModelChange)="ngSettleDetailData.T2_SELL_AMT=removeNumberPipeFormat($event)" (keypress)="onlyNumbers($event)"
+        placeholder="Sell AMT">
+    </mat-form-field>
+    <mat-checkbox color="warn" (click)="addT2_SELL_AMT(ngSettleDetailData)"></mat-checkbox>
+    <!-- {{checked}} -->
+    <mat-form-field [ngStyle]="{'width':'15%','margin': '30px'}" class="standard-width">
+      <input matInput [(ngModel)]="ngSettleDetailData.T2_BUY_EXCHANGE_RATE" placeholder="Buy Exchange Rate">
+    </mat-form-field>
+  </div>
+  <div *ngIf="ngSettleDetailData.isDisabled">
+    <!-- <mat-form-field class="standard-width">
+      <input matInput [(ngModel)]="ngSettleDetailData.SETTLEMENT_AMT" placeholder="交割收入">
+    </mat-form-field> -->
+    <!-- 交割收入
+    {{ngSettleDetailData.SETTLEMENT_AMT|number}} -->
+  </div>
+
+  <div *ngIf="ngSettleDetailData.isDisabled">
+
+    <mat-form-field class="standard-width">
+      <mat-select [(ngModel)]="userSelected1" placeholder="挑選1" (ngModelChange)="summayAMT1(userSelected1)">
+        <mat-option *ngFor="let cp of selected " [value]="cp">
+          {{cp.SELECTED_CURRENCY}} {{cp.SELECTED_AMT| number}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field class="standard-width">
+      <mat-select [(ngModel)]="userSelected2" placeholder="挑選2" (ngModelChange)="summayAMT2(userSelected2)">
+        <mat-option *ngFor="let cp of selected " [value]="cp">
+          {{cp.SELECTED_CURRENCY}} {{cp.SELECTED_AMT | number}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    交割收入：
+    {{ngSettleDetailData.SETTLEMRNT_T1_CURRENCY}}
+    {{ngSettleDetailData.SETTLEMENT_AMT|number}}
+  </div>
+  <h4>NET GAIN：
+    {{ngSettleDetailData.SETTLEMRNT_T1_CURRENCY}}
+    {{ngSettleDetailData.SETTLEMENT_T1_AMT|number}}
+    -{{ngSettleDetailData.SETTLEMENT_T2_CURRENCY}}
+    {{ngSettleDetailData.SETTLEMENT_T2_AMT|number}}=
+    {{ngSettleDetailData.SETTLEMRNT_T1_CURRENCY}}
+    {{ngSettleDetailData.SETTLEMENT_AMT|number}}
+    =USD 12345678.9
+  </h4>
+
+  <!-- <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.SETTLEMENT_AMT" placeholder="最後收入">
+  </mat-form-field> -->
+
+  <!-- 
+  <div *ngIf="ngSettleDetailData.isDisabled">
+    <mat-form-field [ngStyle]="{'width':'60%'}" class="standard-width">
+      <input matInput [(ngModel)]="ngSettleDetailData.SUMMARY" placeholder="總結">
+    </mat-form-field>
+  </div> -->
+</div>
+
+<div style="text-align:right">
+  <div *ngIf="update_yn">
+    <button *ngIf=!ngSettleDetailData.isDisabled mat-fab color="primary" (click)="ngSettleDetailData.isDisabled=true">
+      <span matTooltip="Edit">
+        <mat-icon>edit</mat-icon>
+      </span>
+    </button>
+
+
+    <button *ngIf=ngSettleDetailData.isDisabled mat-fab color="primary" (click)="ngSettleDetailData.isDisabled=false">
+      <span matTooltip="Cancel Edit">
+        <mat-icon>clear</mat-icon>
+      </span>
+    </button>
+
+    <button *ngIf=ngSettleDetailData.isDisabled mat-fab color="warn"
+      (click)="ngSettleDetailData.isDisabled=false;updateData(ngSettleDetailData)">
+      <span matTooltip="Confirm">
+        <mat-icon>send</mat-icon>
+      </span>
+    </button>
+  </div>
+
+  <div *ngIf="add_yn">
+    <button mat-fab color="primary" (click)="addData(ngSettleDetailData)">
+      <span matTooltip="新增">
+        <mat-icon>save</mat-icon>
+      </span>
+    </button>
+  </div>
+  <div *ngIf="copy_yn">
+    <button mat-fab color="accent" (click)="copyAddData(ngSettleDetailData)">
+      <span matTooltip="複製修改後新增">
+        <mat-icon>send</mat-icon>
+      </span>
+    </button>
+  </div>
+
+</div>
+<!-- </div> -->
+
+<!-- <mat-form-field>
+    <input matInput [(ngModel)]="ngSettleDetailData.CURR" [disabled]="!ngSettleDetailData.isDisabled" placeholder="幣別">
+  </mat-form-field>
+  <mat-form-field [ngStyle]="
+      {'width':'50%'}" class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.EXCHANGE_RATE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="匯率">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.UNIT_RENT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="UNIT_RENT">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.MONTH_RENT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="MONTH_RENT">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.UNIT_MANAGE_FEE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="UNIT_MANAGE_FEE">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.MONTH_MANAGE_FEE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="MONTH_MANAGE_FEE">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.CAR_SPACE_AMT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="CAR_SPACE_AMT">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.UNIT_RENT_CAR_SPACE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="UNIT_RENT_CAR_SPACE">
+  </mat-form-field>
+
+
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.MONTH_RENT_CAR_SPACE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="MONTH_RENT_CAR_SPACE">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.DEPOSIT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="DEPOSIT">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.ADJ_RENT_METHOD" [disabled]="!ngSettleDetailData.isDisabled" placeholder="ADJ_RENT_METHOD">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.RENOVATE_UNIT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="RENOVATE_UNIT">
+  </mat-form-field>
+
+
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.RENOVATE_FEE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="RENOVATE_FEE">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.UNIT_RENOVATE_FEE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="UNIT_RENOVATE_FEE">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.RENOVATE_YEAR" [disabled]="!ngSettleDetailData.isDisabled" placeholder="RENOVATE_YEAR">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.MONTH_RENT_AMT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="MONTH_RENT_AMT">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.YEAR_RENT_AMT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="YEAR_RENT_AMT">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.STATE_AREA" [disabled]="!ngSettleDetailData.isDisabled" placeholder="STATE_AREA">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.COUNTRY" [disabled]="!ngSettleDetailData.isDisabled" placeholder="COUNTRY">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.CITY" [disabled]="!ngSettleDetailData.isDisabled" placeholder="CITY">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.CAPITAL_AMT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="CAPITAL_AMT">
+  </mat-form-field> -->
+
+<!-- <mat-chip-list>
+  <mat-chip color="accent" selected="true">{{ngSettleDetailData.SEQREF}}</mat-chip>
+  <mat-chip color="accent" selected="true">{{ngSettleDetailData.OP_BANK}}</mat-chip>
+  <mat-chip color="accent" selected="true">{{ngSettleDetailData.USR_NAME}}</mat-chip>
+</mat-chip-list>
+<br>
+<mat-form-field>
+  <input matInput [(ngModel)]="ngSettleDetailData.SEQREF" [disabled]="!ngSettleDetailData.isDisabled" placeholder="SEQREF">
+</mat-form-field> -->
+<!-- <mat-form-field>
+    <input matInput [(ngModel)]="ngSettleDetailData.CURR" [disabled]="!ngSettleDetailData.isDisabled" placeholder="幣別">
+  </mat-form-field>
+  <mat-form-field [ngStyle]="
+      {'width':'50%'}" class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.EXCHANGE_RATE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="匯率">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.UNIT_RENT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="UNIT_RENT">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.MONTH_RENT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="MONTH_RENT">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.UNIT_MANAGE_FEE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="UNIT_MANAGE_FEE">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.MONTH_MANAGE_FEE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="MONTH_MANAGE_FEE">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.CAR_SPACE_AMT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="CAR_SPACE_AMT">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.UNIT_RENT_CAR_SPACE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="UNIT_RENT_CAR_SPACE">
+  </mat-form-field>
+
+
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.MONTH_RENT_CAR_SPACE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="MONTH_RENT_CAR_SPACE">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.DEPOSIT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="DEPOSIT">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.ADJ_RENT_METHOD" [disabled]="!ngSettleDetailData.isDisabled" placeholder="ADJ_RENT_METHOD">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.RENOVATE_UNIT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="RENOVATE_UNIT">
+  </mat-form-field>
+
+
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.RENOVATE_FEE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="RENOVATE_FEE">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.UNIT_RENOVATE_FEE" [disabled]="!ngSettleDetailData.isDisabled" placeholder="UNIT_RENOVATE_FEE">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.RENOVATE_YEAR" [disabled]="!ngSettleDetailData.isDisabled" placeholder="RENOVATE_YEAR">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.MONTH_RENT_AMT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="MONTH_RENT_AMT">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.YEAR_RENT_AMT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="YEAR_RENT_AMT">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.STATE_AREA" [disabled]="!ngSettleDetailData.isDisabled" placeholder="STATE_AREA">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.COUNTRY" [disabled]="!ngSettleDetailData.isDisabled" placeholder="COUNTRY">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.CITY" [disabled]="!ngSettleDetailData.isDisabled" placeholder="CITY">
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngSettleDetailData.CAPITAL_AMT" [disabled]="!ngSettleDetailData.isDisabled" placeholder="CAPITAL_AMT">
+  </mat-form-field> -->
+
+
+
+
+
+
+<!-- <mat-form-field>
+    <input matInput placeholder="建立日期" [matDatepicker]="VDATE_FROMpicker" [(ngModel)]="ngSettleDetailData.IN_DATE" disabled>
+    <mat-datepicker-toggle matSuffix [for]="VDATE_FROMpicker"></mat-datepicker-toggle>
+    <mat-datepicker #VDATE_FROMpicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput placeholder="修改日期" [matDatepicker]="VDATE_TOpicker" [(ngModel)]="ngSettleDetailData.UP_DATE" disabled>
+    <mat-datepicker-toggle matSuffix [for]="VDATE_TOpicker"></mat-datepicker-toggle>
+    <mat-datepicker #VDATE_TOpicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="最後登入日期" [matDatepicker]="LAST_LOGpicker" [(ngModel)]="ngSettleDetailData.LAST_LOG_DATE" disabled>
+    <mat-datepicker-toggle matSuffix [for]="LAST_LOGpicker"></mat-datepicker-toggle>
+    <mat-datepicker #LAST_LOGpicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field class="standard-width">
+    <input matInput placeholder="最後改變密碼日期" [matDatepicker]="CHANG_PWpicker" [(ngModel)]="ngSettleDetailData.CHANGE_PASSWORD_DATE"
+      disabled>
+    <mat-datepicker-toggle matSuffix [for]="CHANG_PWpicker"></mat-datepicker-toggle>
+    <mat-datepicker #CHANG_PWpicker></mat-datepicker>
+  </mat-form-field> -->
+<!-- <mat-checkbox *ngIf="!deleteIcon(ngSettleDetailData)" [(ngModel)]="ngSettleDetailData.DELETE_YN_BOOL" [disabled]="!ngSettleDetailData.isDisabled" color="accent">是否停用</mat-checkbox>
+<div style="text-align:right">
+  <button *ngIf=!ngSettleDetailData.isDisabled mat-fab color="warn" (click)="ngSettleDetailData.isDisabled=true">
+    <span matTooltip="Edit">
+      <mat-icon>edit</mat-icon>
+    </span>
+  </button>
+  <button *ngIf=ngSettleDetailData.isDisabled mat-fab color="warn" (click)="ngSettleDetailData.isDisabled=false">
+    <span matTooltip="Cancel">
+      <mat-icon>clear</mat-icon>
+    </span>
+  </button>
+  <button *ngIf=ngSettleDetailData.isDisabled mat-fab color="accent" (click)="ngSettleDetailData.isDisabled=false;updateSnackbar()">
+    <span matTooltip="Confirm">
+      <mat-icon>send</mat-icon>
+    </span>
+  </button> -->
+<!-- <button mat-fab color="warn" mat-dialog-close>
+      <span matTooltip="Approve">
+        <mat-icon>done_all
+        </mat-icon>
+      </span>
+    </button> -->
+<!-- </div> -->
+<!-- </div> -->

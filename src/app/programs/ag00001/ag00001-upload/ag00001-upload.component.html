@@ -1,0 +1,73 @@
+<!-- {{ this.data.pData.SEQREF}} -->
+<!-- <div>
+  <div>
+    <mat-form-field appearance="outline" #fileInfo_1 style="width:200px">
+      <input matInput value="{{ fileInfo_1.name }}" placeholder="Browse..">
+    </mat-form-field>
+    <input id="file_temp" multiple type="file" (change)="
+  MultipleUpload($event.target.files);
+  fileInfo_1.name =$event.target.files.item(0).name;"
+      style="display: none" />
+  </div>
+  <button class="button-spacing" mat-fab color="primary" onclick="file_temp.click()">
+    <mat-icon mat-fab matTooltip="Browse..">folder_open</mat-icon>
+  </button>
+</div> -->
+
+
+<div class="standard-width">
+  <mat-nav-list style="width: 700px">
+    <mat-toolbar>{{this.SEQREF}}</mat-toolbar>
+    <p>可接受檔案類型 .png .jpg .jpeg</p>
+    <mat-form-field appearance="outline" #fileInfo style="width:700px">
+      <input #fileInfo matInput value="{{ fileInfo.name }}">
+    </mat-form-field>
+
+    <input id="file" multiple type="file" (click)="initialize()" (change)="
+            onSelectedFiles($event);
+            fileInfo.name =$event.target.files.item(0).name;" style="display: none" />
+    <div style="text-align: right">
+      <!-- 選取檔案 -->
+      <button class="button-spacing" mat-fab onclick="file.click()">
+        <mat-icon matTooltip="Browse..">folder_open</mat-icon>
+      </button>
+
+      <!-- 上傳檔案 -->
+      <button class="button-spacing" mat-fab color="primary" (click)="filesUpload(fileInfo); ">
+        <mat-icon matTooltip="Import/Upload">file_upload</mat-icon>
+      </button>
+    </div>
+    <mat-progress-bar style="margin-top:5px" *ngIf="isProgress" color='primary' mode='determinate'
+      [value]="progressValue"></mat-progress-bar>
+
+    <!-- 列出檔案 -->
+
+    <div style="margin-top:5px" *ngIf="isDone" class="alert alert-success" role="alert">
+      <strong> Success!</strong>
+    </div>
+
+    <mat-list-item *ngFor="let row of tempFileList; let i = index">
+      <span>{{i+1}} : {{row.fileName}} -- {{row.errorMsg}} </span>
+      <button mat-button color="warn" type="button" style="position:absolute; right:0px;" (click)="removeFile(row)">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </mat-list-item>
+
+    <!-- 顯示錯誤檔案 -->
+    <div *ngIf="isError">
+      <div style="margin-top:5px" class="alert alert-info" role="alert">
+        <strong>Upload Results</strong>
+      </div>
+      <mat-list-item *ngFor="let row of errorFileList; let i = index">
+        <span>{{i+1}} : {{row.fileName}} -- {{row.errorMsg}} </span>
+        <!-- <button mat-button color="warn" type="button" style="position:absolute; right:0px;" (click)="removeFile(row)">
+          <mat-icon>clear</mat-icon>
+        </button> -->
+      </mat-list-item>
+    </div>
+  </mat-nav-list>
+  <!-- TEST
+  <mat-list-item *ngFor="let row of errorFileList; let i = index">
+    <span>{{i+1}} : {{row.fileName}} -- {{row.errorMsg}} </span>
+  </mat-list-item> -->
+</div>

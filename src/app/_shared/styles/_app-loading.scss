@@ -1,0 +1,87 @@
+// app-loading animation
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+}
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 2, 200;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 90, 200;
+    stroke-dashoffset: -34px;
+  }
+
+  100% {
+    stroke-dasharray: 90, 200;
+    stroke-dashoffset: -123px;
+  }
+}
+
+.app-loading {
+  bottom: 0;
+  left: 0;
+  padding: 5%;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.loader {
+  margin: 0 auto;
+  position: relative;
+  width: 200px;
+
+  &::before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+  }
+}
+
+.path {
+  animation-duration: 1.6s;
+  animation-iteration-count: 1;
+  animation-name: dash;
+  animation-play-state: paused;
+  animation-timing-function: ease-in-out;
+  fill: none;
+  stroke: $primary;
+  stroke-dasharray: 2, 200;
+  stroke-dashoffset: 0;
+  stroke-linecap: butt;
+  stroke-miterlimit: 10;
+  stroke-width: 5;
+}
+
+.circular {
+  animation-delay: 700ms;
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-name: rotate;
+  animation-play-state: paused;
+  animation-timing-function: linear;
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform-origin: center center;
+  width: 100%;
+}
+
+.running {
+  animation-iteration-count: infinite;
+  animation-play-state: running;
+}

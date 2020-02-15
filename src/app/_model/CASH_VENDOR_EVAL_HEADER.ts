@@ -1,0 +1,31 @@
+export class CASH_VENDOR_EVAL_HEADER {
+  public KEY_NO: number;
+  public SYS_ID: string;
+  public VDR_KEY: number;
+  public VSL_KEY: number;
+  public FORM_KEY: number;
+  public SRC_TAB: string;
+  public SRC_KEY: number;
+  public REQUEST_NO: string;
+  public JOB_DSCP: string;
+  public PART_RCV_DATE = new Date();
+  public EVAL_DATE = new Date();
+  public EVAL_SDATE = new Date();
+  public EVAL_EDATE = new Date();
+  public EVALUATOR: string;
+  public FNL_SCORE: number;
+  public CLASS: string;
+  public REMARKS: string;
+  public IMPROVE_MATTERS: string;
+  public REQUIREMENTS: string;
+  public APPRAISAL: string;
+  public EVAL_DSCP: string;
+  public COMMENTS: string;
+  public STATUS: string;
+  public IN_USER: string;
+  public IN_DATE = new Date();
+  public UP_USER: string;
+  public UP_DATE = new Date();
+  public OS_USER: string;
+  public TERMINAL: string;
+}

@@ -1,0 +1,110 @@
+<mat-form-field>
+  <mat-select placeholder="COMPANY_ID" [(ngModel)]="EDIVoucher.COMPANY_ID" required>
+    <mat-option *ngFor="let cp of company" [value]="cp.value">
+      {{cp.text }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <input matInput [(ngModel)]="EDIVoucher.CRENO_YEAR" placeholder="製票年度" required>
+</mat-form-field>
+<mat-form-field>
+  <mat-select placeholder="STATUS" [(ngModel)]="EDIVoucher.PROSTATUS" required>
+    <mat-option *ngFor="let st of status" [value]="st.value">
+      {{st.text }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <mat-select placeholder="XML_TYPE" [(ngModel)]="EDIVoucher.VTYPE" required>
+    <mat-option *ngFor="let vt of voucher_type" [value]="vt.value">
+      {{vt.text }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+  <input matInput [(ngModel)]="EDIVoucher.CRENO" placeholder="MNO" (keypress)="notSpace($event)">
+</mat-form-field>
+<mat-form-field>
+  <input matInput [(ngModel)]="EDIVoucher.VOUNO" placeholder="VNO" (keypress)="notSpace($event)">
+</mat-form-field>
+<mat-form-field>
+  <input matInput [matDatepicker]="VDATE_FROMpicker" [(ngModel)]="EDIVoucher.VDATE_FROM" required>
+  <mat-datepicker-toggle matSuffix [for]="VDATE_FROMpicker"></mat-datepicker-toggle>
+  <mat-datepicker #VDATE_FROMpicker></mat-datepicker>
+</mat-form-field>
+<mat-form-field>
+  <input matInput [matDatepicker]="VDATE_TOpicker" [(ngModel)]="EDIVoucher.VDATE_TO" required>
+  <mat-datepicker-toggle matSuffix [for]="VDATE_TOpicker"></mat-datepicker-toggle>
+  <mat-datepicker #VDATE_TOpicker></mat-datepicker>
+</mat-form-field>
+
+
+<button mat-raised-button color="primary" (click)="QueryByCompany()">
+  QUERY
+</button>
+<button mat-raised-button color="warn" (click)="GenEDI()">
+  產生EDI
+</button>
+
+<!-- <button mat-raised-button color="accent" (click)="GenEDItest()">
+  產生EDI測試
+</button> -->
+
+<!-- <app-cm-filter-textbox (changed)="filterChanged($event) ">
+</app-cm-filter-textbox> -->
+
+<div *ngIf="finvouchers.length==0">
+  <!-- <h5>{{'SYS_NOT_EXISTS'|i18n:'Message'}}...</h5> -->
+</div>
+<div *ngIf="finvouchers.length>0">
+  <h5>總共{{finvouchers.length}}筆資料</h5>
+</div>
+
+<table class="table table-striped ">
+  <thead>
+    <div *ngIf="finvouchers.length>0">
+      <mat-checkbox [(ngModel)]="selectedAll " (change)="selectAll(); ">All</mat-checkbox>
+    </div>
+    <tr>
+      <th>EDI(Y/N)</th>
+      <!-- <th>#</th> -->
+      <th>COMPANY_ID</th>
+      <th>VNO</th>
+      <th>MNO</th>
+      <th>XML_TYPE</th>
+      <th>YYYY</th>
+      <th>YMD</th>
+      <th>製票者</th>
+      <th>YYYY</th>
+      <th>YMD</th>
+      <th>傳票者</th>
+      <th>STATUS</th>
+      <th>CURR</th>
+      <th>RBOAMT</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let results of finvouchers" class="item-content">
+      <th style="text-align:center">
+        <mat-checkbox [(ngModel)]="results.EDI_SW " (change)="checkIfAllSelected();"></mat-checkbox>
+      </th>
+      <!-- <td scope="row">{{results.id}}</td> -->
+      <td>{{results.COMPANY_ID}}</td>
+      <td>{{results.VOUNO}}</td>
+      <td>{{results.CRENO}}</td>
+      <td>{{results.vTypeName}}</td>
+      <td>{{results.CRENO_YEAR}}</td>
+      <td>{{results.CREDATE|date:'yyyy.MM.dd'}}</td>
+      <!-- <td>{{results.CREDATE}}</td> -->
+      <td>{{results.cMakerName}}</td>
+      <td>{{results.YEAR}}</td>
+      <td>{{results.VDATE|date:'yyyy.MM.dd'}}</td>
+      <!-- <td>{{results.VDATE}}</td> -->
+      <td>{{results.vMakerName}}</td>
+      <td>{{results.prostatusName}}</td>
+      <td>{{results.ORCURR}}</td>
+      <td style="text-align:right">{{results.ORAMT| currency:'USD'}}</td>
+    </tr>
+  </tbody>
+</table>

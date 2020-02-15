@@ -1,0 +1,79 @@
+<kendo-pdf-export #pdf paperSize="A4" margin="1cm">
+  <div style="text-align:center">
+    <h4>外匯差額交易承作報告</h4>
+    <table border="1" style="font-size:12px;" width=80% height=700 align="center" cellspacing=5 cellpadding=6>
+      <tr>
+        <td width="100px">
+          交易序號
+        </td>
+        <td>{{pSettleData.SEQREF}}</td>
+      </tr>
+      <tr>
+        <td>交易日期</td>
+        <td>{{pSettleData.TRADE_DATE|date:'yyyy年MM月dd日'}}</td>
+      </tr>
+      <tr>
+        <td>交割日期</td>
+        <td>{{pSettleData.SETTLEMENT_DATE|date:'yyyy年MM月dd日'}}</td>
+      </tr>
+      <tr>
+        <td rowspan="2">交易內容</td>
+        <td> SELL {{pSettleData.T1_SELL_CURRENCY}}{{pSettleData.T1_SELL_AMT| number}} /
+          BUY {{pSettleData.T1_BUY_CURRENCY}}{{pSettleData.T1_BUY_AMT| number}} ; FX
+          Rate {{pSettleData.T1_SELL_EXCHANGE_RATE}}</td>
+      </tr>
+      <tr>
+        <td> BUY {{pSettleData.T2_BUY_CURRENCY}}{{pSettleData.T2_BUY_AMT| number}} /
+          SELL {{pSettleData.T2_SELL_CURRENCY}}{{pSettleData.T2_SELL_AMT| number}} ; FX
+          Rate {{pSettleData.T2_BUY_EXCHANGE_RATE}}</td>
+      </tr>
+      <tr>
+        <td>說明</td>
+        <td>{{pSettleData.SETTLEMRNT_T1_CURRENCY}}
+          {{pSettleData.SETTLEMENT_T1_AMT|number}}
+          -{{pSettleData.SETTLEMENT_T2_CURRENCY}}
+          {{pSettleData.SETTLEMENT_T2_AMT|number}}=
+          {{pSettleData.SETTLEMRNT_T1_CURRENCY}}
+          {{pSettleData.SETTLEMENT_AMT|number}}</td>
+      </tr>
+      <tr>
+        <td>承作銀行</td>
+        <td>{{pSettleData.OP_BANK}}</td>
+      </tr>
+      <tr>
+        <td>交割收入</td>
+        <td>{{pSettleData.SETTLEMRNT_T1_CURRENCY}}
+          {{pSettleData.SETTLEMENT_AMT|number}}</td>
+      </tr>
+      <tr>
+        <td>存入銀行</td>
+        <td>{{pSettleData.DP_BANK}} {{pSettleData.FLEX_1}}</td>
+      </tr>
+      <tr>
+        <td>交易人員</td>
+        <td>{{pSettleData.TRADE_USER|code2Name:'FFCM'}}</td>
+      </tr>
+      <tr>
+        <td>交割人員</td>
+        <td>{{pSettleData.SETTLEMENT_USER|code2Name:'FFCM'}}</td>
+      </tr>
+      <tr>
+        <td>覆核</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>主管簽名</td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+</kendo-pdf-export>
+<div style="text-align:right">
+  <button mat-raised-button color="warn" (click)="pdf.saveAs('CM09005.pdf')" [ngStyle]="{'margin': '20px'}">
+    產生PDF...
+    <mat-icon>picture_as_pdf</mat-icon>
+  </button>
+  <button mat-raised-button color="primary" mat-dialog-close>
+    關閉
+  </button>
+</div>

@@ -1,0 +1,298 @@
+<h2 mat-dialog-title>
+  <div *ngIf="add_yn">新增房屋租約</div>
+  <div *ngIf="!add_yn">修改房屋租約 {{ngContractData.SEQREF}}
+  </div>
+</h2>
+<!-- <button mat-mini-fab color="warn" (click)="addWBuildingContractDetailData(ngContractData)">
+  TEST
+</button> -->
+<div>
+  <mat-form-field class="standard-width" [ngStyle]="{'width':'20%'}">
+    <input type="text" matInput [formControl]="officeControl" [matAutocomplete]="auto" placeholder="子公司別"
+      [(ngModel)]="ngContractData.SUB_COMPANY_ID" (ngModelChange)="AgentOfficeMapping(ngContractData);changeSEQ()"
+      onInput="this.value=this.value.toUpperCase()">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of autoOffice| async " [value]="option.AgentOffice">
+        <span [innerHTML]="highlightFiltered(option.AgentOffice)"></span>
+        <!-- -{{option.OFC_NAME}} -->
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  子公司代碼：
+  <label>{{ngContractData.SUB_COMPANY_AGENT}}</label>
+  子公司辦公室：
+  <label>{{ngContractData.SUB_COMPANY_OFFICE}}</label>
+  子公司名稱：
+  <label> {{ngContractData.SUB_COMPANY_NAME}}</label>
+  CITY BASE：
+  <label>{{ngContractData.CITY_BASE}}</label>
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.DOC_NO" placeholder="公文號">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngContractData.BUILDING_NAME" placeholder="大樓名稱">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngContractData.LOC_DISTRICT" placeholder="坐落區域">
+  </mat-form-field>
+
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [matDatepicker]="RENTED_START_DATEpicker" [(ngModel)]="ngContractData.RENTED_START_DATE"
+      placeholder="租約開始日
+  ">
+    <mat-datepicker-toggle matSuffix [for]="RENTED_START_DATEpicker"></mat-datepicker-toggle>
+    <mat-datepicker #RENTED_START_DATEpicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [matDatepicker]="RENTED_END_DATEpicker" [(ngModel)]="ngContractData.RENTED_END_DATE"
+      placeholder="租約結束日">
+    <mat-datepicker-toggle matSuffix [for]="RENTED_END_DATEpicker"></mat-datepicker-toggle>
+    <mat-datepicker #RENTED_END_DATEpicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field class="standard-width inputSize">
+    <mat-select placeholder="區域" [(ngModel)]="ngContractData.STATE_AREA">
+      <mat-option value="亞"> 亞洲</mat-option>
+      <mat-option value="歐"> 歐洲</mat-option>
+      <mat-option value="北美"> 北美洲</mat-option>
+      <mat-option value="南美"> 南美洲</mat-option>
+      <mat-option value="大洋"> 大洋洲</mat-option>
+      <mat-option value="非"> 非洲</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.COUNTRY" placeholder="國家">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.CITY" placeholder="城市">
+  </mat-form-field>
+</div>
+
+
+<div>
+  <!-- <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.AREA_UNIT" (ngModelChange)="change2Sum(ngContractData)" placeholder="面積單位">
+  </mat-form-field> -->
+  <mat-icon>home</mat-icon>
+  <mat-form-field class="standard-width inputSize">
+    <mat-select placeholder="面積單位" [(ngModel)]="ngContractData.AREA_UNIT" (ngModelChange)="change2Sum(ngContractData)">
+      <mat-option value="SM"> SM</mat-option>
+      <mat-option value="SF"> SF</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="standard-width inputSize">
+    <input type="number" matInput [(ngModel)]="ngContractData.WORKING_AREA" (ngModelChange)="change2Sum(ngContractData)"
+      placeholder="辦公區域">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width inputSize">
+    <input type="number" matInput [(ngModel)]="ngContractData.COMMON_AREA" (ngModelChange)="change2Sum(ngContractData)"
+      placeholder="公共區域">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width inputSize">
+    <input type="number" matInput [(ngModel)]="ngContractData.OTHER_AREA" (ngModelChange)="change2Sum(ngContractData)"
+      placeholder="其他區域">
+  </mat-form-field>
+  <label>總承租面積：</label>
+  {{ngContractData.RENTED_AREA|number}}
+  <label>總承租面積(坪)：</label>
+  {{ngContractData.RENTED_AREA_P|number}}
+  <!-- <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.RENTED_AREA" placeholder="總承租面積">
+  </mat-form-field>
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.RENTED_AREA_P" placeholder="總承租面積(坪)">
+  </mat-form-field> -->
+</div>
+
+<div>
+  <!-- <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.CURR" placeholder="幣別">
+  </mat-form-field>
+   -->
+  <mat-icon>person</mat-icon>
+
+
+  <!-- <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.UNIT_RENT" placeholder="房屋租金單價">
+  </mat-form-field> -->
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.MONTH_RENT" (ngModelChange)="change2Sum(ngContractData)"
+      placeholder="每月房屋租金">
+  </mat-form-field>
+  <label>房屋租金單價：</label>
+  {{ngContractData.UNIT_RENT|number}}
+
+  <!-- <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.UNIT_MANAGE_FEE" placeholder="管理費單價">
+  </mat-form-field> -->
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.MONTH_MANAGE_FEE" (ngModelChange)="change2Sum(ngContractData)"
+      placeholder="每月管理費">
+  </mat-form-field>
+
+  <label>管理費單價：</label>
+  {{ngContractData.UNIT_MANAGE_FEE|number}}
+</div>
+
+<div>
+  <mat-icon>directions_car</mat-icon>
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.CAR_SPACE_AMT" (ngModelChange)="change2Sum(ngContractData)"
+      placeholder="承租車位數">
+  </mat-form-field>
+  <!--
+  <mat-form-field class="standard-width ">
+    <input matInput [(ngModel)]="ngContractData.UNIT_RENT_CAR_SPACE" placeholder="每席車位租金單價">
+  </mat-form-field> -->
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.MONTH_RENT_CAR_SPACE" (ngModelChange)="change2Sum(ngContractData)"
+      placeholder="每月車位租金">
+  </mat-form-field>
+
+  <label>每席車位租金單價：</label>
+  {{ngContractData.UNIT_RENT_CAR_SPACE|number}}
+
+
+</div>
+
+<div>
+  <mat-icon>domain</mat-icon>
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.BUILDING_TOT_FLOOR" placeholder="大樓總樓層數">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.BUILDING_RENTED_FLOOR" placeholder="承租樓層">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.BUILDING_AGE" placeholder="大樓屋齡(年)">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.SEAT_CAPACITY" placeholder="可容納人數">
+  </mat-form-field>
+
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.SEAT_ACTUAL_PEOPLE" (ngModelChange)="change2Sum(ngContractData)"
+      placeholder="現有人數">
+  </mat-form-field>
+  <label>人均面積(坪)：</label>
+  {{ngContractData.AVG_WORKING_AREA|number}}
+  <!-- {{AVG_WORKING_AREA}} -->
+</div>
+<div>
+  <mat-icon>build</mat-icon>
+  <mat-form-field class="standard-width">
+    <input matInput [ngModel]="ngContractData.DEPOSIT|number"
+      (ngModelChange)="ngContractData.DEPOSIT=removeNumberPipeFormat($event)" (keypress)="onlyNumbers($event)"
+      placeholder="房屋押租保證金">
+  </mat-form-field>
+
+  <!-- <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.RENOVATE_UNIT" placeholder="裝修費單位">
+  </mat-form-field> -->
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [ngModel]="ngContractData.RENOVATE_FEE|number"
+      (ngModelChange)="ngContractData.RENOVATE_FEE=removeNumberPipeFormat($event);change2Sum(ngContractData)"
+      (keypress)="onlyNumbers($event)" placeholder="裝修費原幣">
+  </mat-form-field>
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [ngModel]="ngContractData.RENOVATE_FEE_TWD|number"
+      (ngModelChange)="ngContractData.RENOVATE_FEE_TWD=removeNumberPipeFormat($event)" (keypress)="onlyNumbers($event)"
+      placeholder="裝修費(TWD)">
+    <!-- <mat-hint align="end">TWD</mat-hint> -->
+    <!-- <span matSuffix>TWD</span> -->
+  </mat-form-field>
+
+  <label>裝修費單價(TWD/坪)：</label>
+  {{ngContractData.UNIT_RENOVATE_FEE|number}}
+  <!-- <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.UNIT_RENOVATE_FEE" placeholder="裝修費單價(TWD/坪)">
+  </mat-form-field> -->
+
+  <mat-form-field class="standard-width inputSize">
+    <input matInput [(ngModel)]="ngContractData.RENOVATE_YEAR" placeholder="裝修年份">
+  </mat-form-field>
+</div>
+<div>
+  <mat-icon>local_atm</mat-icon>
+  <mat-form-field class="standard-width" [ngStyle]="{'width':'10%'}">
+    <input type="text" matInput [formControl]="currControl" [matAutocomplete]="auto2" placeholder="幣別"
+      [(ngModel)]="ngContractData.CURR"
+      (ngModelChange)="getFxRate(ngContractData.CURR,'TWD',pDays);change2Sum(ngContractData)"
+      onInput="this.value=this.value.toUpperCase()">
+    <mat-autocomplete #auto2="matAutocomplete">
+      <mat-option *ngFor="let option of autoCurr| async " [value]="option.CURR_CD">
+        {{option.CURR_CD}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <mat-form-field class="standard-width inputSize input-readOnly">
+    <input matInput [ngModel]="ngContractData.EXCHANGE_RATE|number"
+      (ngModelChange)="ngContractData.YEAR_RENT_AMT=removeNumberPipeFormat($event)" (keypress)="onlyNumbers($event)"
+      placeholder="兌換TWD匯率" readonly>
+  </mat-form-field>
+  <mat-form-field class="standard-width input-readOnly">
+    <input matInput [ngModel]="ngContractData.MONTH_RENT_AMT| number"
+      (ngModelChange)="ngContractData.MONTH_RENT_AMT=removeNumberPipeFormat($event);change2Sum(ngContractData)"
+      (keypress)="onlyNumbers($event)" placeholder="月租金(TWD)" readonly>
+  </mat-form-field>
+
+  <mat-form-field class="standard-width input-readOnly">
+    <input matInput [ngModel]="ngContractData.YEAR_RENT_AMT| number"
+      (ngModelChange)="ngContractData.YEAR_RENT_AMT=removeNumberPipeFormat($event)" (keypress)="onlyNumbers($event)"
+      placeholder="年租金(TWD)" readonly>
+  </mat-form-field>
+
+  <mat-form-field class="standard-width">
+    <input matInput [(ngModel)]="ngContractData.ADJ_RENT_METHOD" placeholder="租金調整方式">
+  </mat-form-field>
+
+  <mat-checkbox color="warn" [(ngModel)]="ngContractData.FLEX_5">自有資產</mat-checkbox>
+
+</div>
+
+<div>
+  <mat-icon>edit</mat-icon>
+  <mat-form-field class="standard-width">
+    <textarea matInput [(ngModel)]="ngContractData.FLEX_1" placeholder="備註"></textarea>
+  </mat-form-field>
+  <label>合約到期前提醒</label>
+  <mat-form-field class="standard-width inputSize">
+    <mat-select placeholder="" [(ngModel)]="ngContractData.FLEX_2">
+      <mat-option value="Y"> 是</mat-option>
+      <mat-option value="N"> 否</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<footer style="text-align:right">
+  <button mat-fab color="warn" matTooltip="Close" mat-dialog-close>
+    <mat-icon>clear
+    </mat-icon>
+  </button>
+  <button mat-fab color="accent" *ngIf="add_yn" matTooltip="Save" (click)="addWBuildingContractData(ngContractData)">
+    <mat-icon>
+      file_download </mat-icon>
+  </button>
+  <button mat-fab color="primary" *ngIf="!add_yn" matTooltip="Update"
+    (click)="updateBuildingContractData(ngContractData)">
+    <mat-icon>
+      send </mat-icon>
+  </button>
+</footer>
